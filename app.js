@@ -12,14 +12,17 @@ app.use(express.json());
 // app.use(cookieParser());
 
 
+// Routes
+const AuthRouter = require('./Controllers/auth');
+const HomeRouter = require('./Controllers/home');
+app.use('/', AuthRouter);
+app.use('/', HomeRouter);
 
-app.get("/",(req,res)=>{
-    res.send("hello world")
 
-})
 
-app.get('/login', (req, res) => {
-    res.render('home')
+app.listen(process.env.PORT,()=>{
+    console.log(`server is running at port ${process.env.PORT}`)
 });
+
 
 module.exports=app;
