@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Time Capsule</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-pink-500 to-purple-700 h-screen flex ">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-lg h-full p-6 glass mr-[20px] mt-2">
+            <div class="text-xl font-bold text-blue-900 flex items-center space-x-2">
+                <img src="/images/background1.png" alt="Virtual Time Capsule" class="w-6 h-6 object-contain">
+                <span>Time Capsule</span>
+            </div>
+            <nav class="mt-6 space-y-4">
+                <a href="/profile" class="flex items-center space-x-2 text-black font-semibold p-3 rounded-lg bg-gray-200 hover:bg-blue-300">
+                    <span>🏠</span>
+                    <span>Home</span>
+                </a>
+                <a href="/myaccount" class="flex items-center space-x-2 text-gray-600 p-3 rounded-lg hover:bg-blue-300">
+                    <span>👤</span>
+                    <span>Account</span>
+                </a>
+                <a href="/" class="flex items-center space-x-2 text-gray-600 p-3 rounded-lg hover:bg-red-300">
+                    <span>🚪</span>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <section class="bg-white shadow-lg rounded-lg px-4 py-2 mr-[20px] w-[40%] h-1/2 mt-2 ">
+            <h2 class="text-2xl font-bold text-gray-800">Future Capsules</h2>
+            <div class="mt-4 space-y-4">
+                <div class="p-4 bg-gray-100 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold">Capsule 1</h3>
+                    <p class="text-sm text-gray-600">Description of Capsule 1...</p>
+                </div>
+                <div class="p-4 bg-gray-100 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold">Capsule 2</h3>
+                    <p class="text-sm text-gray-600">Description of Capsule 2...</p>
+                </div>
+                <div class="p-4 bg-gray-100 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold">Capsule 3</h3>
+                    <p class="text-sm text-gray-600">Description of Capsule 3...</p>
+                </div>
+                <div class="p-4 bg-gray-100 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold">Capsule 4</h3>
+                    <p class="text-sm text-gray-600">Description of Capsule 4...</p>
+                </div>
+            </div>
+        </section>
+
+        
+        <section class="bg-white shadow-lg rounded-lg px-4 py-2 mr-4  w-[40%] h-1/2 mt-2">
+            <h2 class="text-2xl font-bold text-gray-800">Opened Capsules</h2>
+            <div class="mt-4 space-y-4">
+                <div class="p-4 bg-gray-100 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold">Capsule 1</h3>
+                    <p class="text-sm text-gray-600">Description of Capsule 1...</p>
+                </div>
+                <div class="p-4 bg-gray-100 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold">Capsule 2</h3>
+                    <p class="text-sm text-gray-600">Description of Capsule 2...</p>
+                </div>
+                <div class="p-4 bg-gray-100 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold">Capsule 3</h3>
+                    <p class="text-sm text-gray-600">Description of Capsule 3...</p>
+                </div>
+                <div class="p-4 bg-gray-100 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold">Capsule 4</h3>
+                    <p class="text-sm text-gray-600">Description of Capsule 4...</p>
+                </div>
+            </div>
+        </section>
+
+</body>
+</html>

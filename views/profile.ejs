@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Capsule</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-pink-500 to-purple-700 h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-lg h-full p-6 glass">
+        <div class="text-xl font-bold text-blue-900 flex items-center space-x-2">
+            <img src="/images/background1.png" alt="Virtual Time Capsule" class="w-6 h-6 object-contain">
+            <span>Time Capsule</span>
+        </div>
+        <nav class="mt-6 space-y-4">
+            <a href="/profile" class="flex items-center space-x-2 text-black font-semibold p-3 rounded-lg bg-gray-300 hover:bg-blue-300">
+                <span>🏠</span>
+                <span>Home</span>
+            </a>
+            <a href="/myaccount" class="flex items-center space-x-2 text-gray-600 p-3 rounded-lg hover:bg-blue-300">
+                <span>👤</span>
+                <span>Account</span>
+            </a>
+            <a href="/" class="flex items-center space-x-2 text-gray-600 p-3 rounded-lg hover:bg-red-300">
+                <span>🚪</span>
+                <span>Logout</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col items-center justify-center text-center p-8">
+        <div class="bg-white shadow-lg p-10 glass flex flex-col items-center">
+            <h1 class="text-3xl font-bold text-blue-800">Welcome!</h1>
+            <p class="text-gray-600 mt-2">
+                Create your first capsule and document what it's like at each grade or level of school!
+            </p>
+            <!-- Centered Image -->
+            <img src="/images/background9.png" alt="Graduation" class="w-40 mt-6 rounded-lg shadow-md">
+            
+            <!-- Create Capsule Button -->
+            <button id="openCapsule" class="mt-6 bg-blue-600 text-white px-6 py-3 rounded-full shadow-lg flex items-center space-x-2 transform transition-all hover:scale-110">
+                <span>➕</span>
+                <span>Create Capsule</span>
+            </button>
+        </div>
+    </main>
+
+    <!-- Capsule Modal (Hidden by Default) -->
+    <div id="capsuleModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg p-6 w-96 shadow-lg relative">
+            <button id="closeCapsule" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-lg">❌</button>
+            <h2 class="text-xl font-bold text-gray-800">Create New Capsule</h2>
+            <input type="text" placeholder="Capsule Name" class="mt-4 p-2 border rounded w-full">
+            <textarea placeholder="Capsule Description" class="mt-2 p-2 border rounded w-full h-24"></textarea>
+            <button class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition w-full">
+                Save Capsule
+            </button>
+        </div>
+    </div>
+
+    <!-- Bottom Navbar -->
+    <div class="fixed bottom-0 w-full bg-white shadow-md flex justify-around p-4">
+        <a href="/capsule" id="openCapsule" class="text-gray-600 hover:text-blue-600 text-4xl">💼</a>
+        <a href="/sharedcapsule" class="text-gray-600 hover:text-blue-600 text-4xl">📤</a>
+        <a href="/friends" class="text-gray-600 hover:text-blue-600 text-4xl">👥</a>
+    </div>
+
+    <!-- JavaScript for Capsule Popup -->
+    <script>
+        document.getElementById("openCapsule").addEventListener("click", function() {
+            document.getElementById("capsuleModal").classList.remove("hidden");
+        });
+
+        document.getElementById("closeCapsule").addEventListener("click", function() {
+            document.getElementById("capsuleModal").classList.add("hidden");
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener("click", function(event) {
+            let modal = document.getElementById("capsuleModal");
+            if (event.target === modal) {
+                modal.classList.add("hidden");
+            }
+        });
+    </script>
+
+</body>
+</html>

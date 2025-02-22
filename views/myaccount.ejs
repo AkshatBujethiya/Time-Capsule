@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | Virtual Time Capsule</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-200 flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-lg min-h-screen p-6">
+        <div class="text-xl font-bold text-blue-900 flex items-center space-x-2">
+            <img src="/images/background1.png" alt="Virtual Time Capsule" class="w-6 h-6 object-contain">
+            <span>Time Capsule</span>
+        </div>
+        <nav class="mt-6 space-y-4">
+            <a href="/profile" class="flex items-center space-x-2 text-black font-semibold p-3 rounded-lg bg-gray-200 hover:bg-blue-300">
+                <span>🏠</span>
+                <span>Home</span>
+            </a>
+            <a href="/myaccount" class="flex items-center space-x-2 text-gray-600 p-3 rounded-lg hover:bg-blue-300">
+                <span>👤</span>
+                <span>Account</span>
+            </a>
+            <a href="/" class="flex items-center space-x-2 text-gray-600 p-3 rounded-lg hover:bg-red-300">
+                <span>🚪</span>
+                <span>Logout</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8 relative bg-gradient-to-r from-pink-500 to-purple-700">
+        <!-- Profile Section (Top Left) -->
+        <section class="bg-white shadow-lg rounded-lg p-6 absolute top-10 left-6 w-1/2">
+            <h2 class="text-2xl font-bold text-gray-800">Profile</h2>
+            <div class="flex mt-4 space-x-6">
+                <!-- Profile Picture Upload -->
+                <div class="relative">
+                    <img src="/images/background10.png" alt="Graduation" class="w-40 mt-6 rounded-lg shadow-md">
+                </div>
+                <!-- Profile Form -->
+                <div class="flex-1">
+                    <h3 class="border p-2 rounded-md w-full mt-3">user.firstname</h3>
+                    <h3 class="border p-2 rounded-md w-full mt-3">user.lastname</h3>
+                    <h3 class="border p-2 rounded-md w-full mt-3">user.email</h3>
+                    <h3 class="border p-2 rounded-md w-full mt-3">user.number</h3>
+                    <button class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition">
+                        Edit Profile
+                    </button>
+                </div>
+            </div>
+            <p class="mt-4 text-sm">
+                Want to change your password? <a href="#" class="text-blue-600 font-semibold">Reset Password</a>
+            </p>
+        </section>
+
+        <!-- My Capsules Section (Below Profile) -->
+        <section class="bg-white shadow-lg rounded-lg p-6 mt-8 w-1/2 absolute top-[28rem] left-6">
+            <h2 class="text-2xl font-bold text-gray-800">My Capsules</h2>
+            <div class="mt-4 space-y-4">
+                <div class="p-4 bg-gray-100 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold">Capsule 1</h3>
+                    <p class="text-sm text-gray-600">Description of Capsule 1...</p>
+                </div>
+                <div class="p-4 bg-gray-100 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold">Capsule 2</h3>
+                    <p class="text-sm text-gray-600">Description of Capsule 2...</p>
+                </div>
+                <div class="p-4 bg-gray-100 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold">Capsule 3</h3>
+                    <p class="text-sm text-gray-600">Description of Capsule 3...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
