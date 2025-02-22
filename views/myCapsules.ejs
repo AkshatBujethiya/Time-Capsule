@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User's Capsules</title>
+    <link rel="stylesheet" href="/path/to/your/styles.css">
+</head>
+<body>
+    <h1>User's Capsules</h1>
+    <div class="capsules-container">
+        <% unlockedCapsules.forEach(function(capsule) { %>
+            <div class="capsule-card" onclick="location.href='/capsule/<%= capsule.id %>'">
+                <h2><%= capsule.capsuleName %></h2>
+                <p>Unlock Date: <%= capsule.unlockDate %></p>
+            </div>
+        <% }); %>
+    </div>
+</body>
+</html>
