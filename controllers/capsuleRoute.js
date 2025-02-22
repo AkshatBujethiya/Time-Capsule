@@ -15,17 +15,19 @@ capsuleRouter.get('/capsules', isLoggedIn, async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
     
-        // Filter capsules that have reached their unlock date
+        // Separate capsules into unlocked and locked based on the unlock date
         const currentDate = new Date();
         const unlockedCapsules = user.capsules.filter(capsule => capsule.unlockDate <= currentDate);
+        const lockedCapsules = user.capsules.filter(capsule => capsule.unlockDate > currentDate);
         
-        console.log(unlockedCapsules);
-        res.render('myCapsules',{unlockedCapsules:unlockedCapsules});
+        console.log(unlockedCapsules, lockedCapsules);
+        res.render('myCapsules', { unlockedCapsules, lockedCapsules, user });
     } catch (error) {
         console.error('Error retrieving capsules:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
 capsuleRouter.post('/capsules/create', isLoggedIn, createCapsule);
 
 capsuleRouter.get('/capsule/:capsuleId', isLoggedIn, async (req, res) => {

@@ -45,7 +45,7 @@ UploadRouter.post('/upload', isLoggedIn, upload.single('file'), async (req, res)
             user.capsules.push(capsule);
             await user.save();
             console.log("4")
-            res.status(200).json({ message: 'File uploaded successfully', fileUrl: result.secure_url });
+            res.redirect('/');
         });
     } catch (error) {
         console.error('Error handling file upload:', error);
