@@ -51,7 +51,7 @@ UploadRouter.post('/upload', isLoggedIn, upload.array('files', 10), async (req, 
         // Add the capsule to the user's capsules array
         user.capsules.push(capsule);
         await user.save();
-        res.redirect('/');
+        res.redirect('/dashboard');
     } catch (error) {
         console.error('Error handling file upload:', error);
         res.status(500).json({ message: 'Internal server error' });
