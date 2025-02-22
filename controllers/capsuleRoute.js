@@ -20,12 +20,8 @@ capsuleRouter.get('/capsules', isLoggedIn, async (req, res) => {
         const unlockedCapsules = user.capsules.filter(capsule => capsule.unlockDate <= currentDate);
         const lockedCapsules = user.capsules.filter(capsule => capsule.unlockDate > currentDate);
         
-<<<<<<< HEAD
-        res.render('myCapsules', { unlockedCapsules, lockedCapsules, user });
-=======
         console.log(unlockedCapsules, lockedCapsules);
         res.render('myCapsules', { unlockedCapsules, lockedCapsules, user,username: req.user.name });
->>>>>>> 6f1be850edf35fd3f1aa8d29c9006d9ddc0f334a
     } catch (error) {
         console.error('Error retrieving capsules:', error);
         res.status(500).json({ message: 'Internal server error' });
