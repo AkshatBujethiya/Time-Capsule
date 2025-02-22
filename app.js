@@ -26,6 +26,9 @@ const path = require('path');
 const cors=require('cors')
 app.use(cors());
 
+app.use(express.urlencoded({extended:true}));
+app.use(express.json());
+
 // Set-up view engine
 app.set('view engine', 'ejs');
 app.use(express.json());
@@ -51,6 +54,7 @@ const HomeRouter = require('./controllers/home');
 const UploadRouter = require('./controllers/uploadRoute');
 const UserRouter = require('./controllers/userRoutes');
 const CapsuleRouter = require('./controllers/capsuleRoute');
+const { url } = require('inspector');
 
 app.use('/', UserRouter);
 app.use('/', AuthRouter);

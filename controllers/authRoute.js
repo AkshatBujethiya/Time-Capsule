@@ -21,9 +21,13 @@ AuthRouter.get('/auth/google/failure', (req, res) => {
 });
 
 AuthRouter.get('/logout', (req, res) => {
-    req.logout();
-    req.session.destroy();
+    req.logout((err) => {
+        if (err) {
+            console.log(err);
+        }
+    });
     res.redirect('/');
+    
 });
 
 module.exports=AuthRouter;

@@ -15,24 +15,41 @@ UploadRouter.post('/upload', isLoggedIn, upload.single('file'), async (req, res)
     try {
         // Upload the file to Cloudinary
         cloudinary.uploader.upload(req.file.path, async (err, result) => {
-        if (err) {
-            console.error('Error uploading to Cloudinary:', err);
-            return res.status(500).json({ message: 'Error uploading file' });
-        }
+            if (err) {
+                console.error('Error uploading to Cloudinary:', err);
+                return res.status(500).json({ message: 'Error uploading file' });
+            }
 
-        // Get the authenticated user's ID
-        const userId = req.user._id;
-
-        // Find the user and add the file URL to their profile
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        user.files.push(result.secure_url); // Add the Cloudinary URL to the user's files array
-        await user.save();
-
-        res.status(200).json({ message: 'File uploaded successfully', fileUrl: result.secure_url });
+            // Get the authenticated user's ID
+            const userId = req.user._id;
+            console.log(userId);
+            // Find the user and add the file URL to their profile
+            const user = await User.findById(userId);
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            console.log("1")
+            // Create a new file object
+            const file = {
+                fileName: req.file.originalname,
+                fileUrl: result.secure_url
+            };
+            console.log("2")
+            // Create a new capsule object
+            const capsule = {
+                capsuleName: req.body.capsuleName,
+                capsuleDescription: req.body.capsuleDescription,
+                files: [file],
+                unlockDate: new Date(req.body.unlockDate),
+                createdAt: new Date()
+            };
+            console.log(req.body);
+            console.log(capsule);
+            // Add the capsule to the user's capsules array
+            user.capsules.push(capsule);
+            await user.save();
+            console.log("4")
+            res.status(200).json({ message: 'File uploaded successfully', fileUrl: result.secure_url });
         });
     } catch (error) {
         console.error('Error handling file upload:', error);

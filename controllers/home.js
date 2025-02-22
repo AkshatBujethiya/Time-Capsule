@@ -6,8 +6,12 @@ HomeRouter.get("/",(req,res)=>{
     res.render('home');
 });
 
-HomeRouter.get("/about", isLoggedIn, (req,res)=>{
-    res.send(`hello ${req.user.displayName}`);
+HomeRouter.get("/dashboard", isLoggedIn, (req,res)=>{
+    res.render(`dashboard`);
+});
+
+HomeRouter.get("/myaccount", isLoggedIn, (req,res)=>{
+    res.render(`myaccount`);
 });
 
 module.exports=HomeRouter;

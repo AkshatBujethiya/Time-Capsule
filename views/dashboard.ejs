@@ -23,7 +23,7 @@
             <span>Time Capsule</span>
         </div>
         <nav class="mt-6 space-y-4">
-            <a href="/profile" class="flex items-center space-x-2 text-black font-semibold p-3 rounded-lg bg-gray-300 hover:bg-blue-300">
+            <a href="/dashboard" class="flex items-center space-x-2 text-black font-semibold p-3 rounded-lg bg-gray-300 hover:bg-blue-300">
                 <span>🏠</span>
                 <span>Home</span>
             </a>
@@ -31,7 +31,7 @@
                 <span>👤</span>
                 <span>Account</span>
             </a>
-            <a href="/" class="flex items-center space-x-2 text-gray-600 p-3 rounded-lg hover:bg-red-300">
+            <a href="/logout" class="flex items-center space-x-2 text-gray-600 p-3 rounded-lg hover:bg-red-300">
                 <span>🚪</span>
                 <span>Logout</span>
             </a>
@@ -61,11 +61,15 @@
         <div class="bg-white rounded-lg p-6 w-96 shadow-lg relative">
             <button id="closeCapsule" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-lg">❌</button>
             <h2 class="text-xl font-bold text-gray-800">Create New Capsule</h2>
-            <input type="text" placeholder="Capsule Name" class="mt-4 p-2 border rounded w-full">
-            <textarea placeholder="Capsule Description" class="mt-2 p-2 border rounded w-full h-24"></textarea>
-            <button class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition w-full">
-                Save Capsule
-            </button>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <input name="capsuleName" type="text" placeholder="Capsule Name" class="mt-4 p-2 border rounded w-full" required>
+                <textarea name="capsuleDescription" placeholder="Capsule Description (Optional)" class="mt-2 p-2 border rounded w-full h-24"></textarea>
+                <input type="file" name="file" required>
+                <input name="unlockDate" type="datetime-local" class="mt-2 p-2 border rounded w-full" required>
+                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition w-full">
+                    Save Capsule
+                </button>
+            </form>
         </div>
     </div>
 
