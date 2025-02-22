@@ -20,7 +20,6 @@ capsuleRouter.get('/capsules', isLoggedIn, async (req, res) => {
         const unlockedCapsules = user.capsules.filter(capsule => capsule.unlockDate <= currentDate);
         const lockedCapsules = user.capsules.filter(capsule => capsule.unlockDate > currentDate);
         
-        console.log(unlockedCapsules, lockedCapsules);
         res.render('myCapsules', { unlockedCapsules, lockedCapsules, user, username: req.user.name });
     } catch (error) {
         console.error('Error retrieving capsules:', error);
@@ -49,14 +48,14 @@ capsuleRouter.post('/capsules/create', isLoggedIn, async (req, res) => {
         }
 
         const capsule = {
-            capsuleName,
+            capsuleName : capsuleName,
             capsuleDescription,
             unlockDate: new Date(unlockDate),
             createdAt: new Date(),
             isCommunal: false,
             files: []
         };
-
+        console.log(capsule);
         if (lockOption === 'specified' && lockDate) {
             capsule.lockDate = new Date(lockDate);
         }

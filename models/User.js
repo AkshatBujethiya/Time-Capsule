@@ -10,6 +10,7 @@ const capsuleSchema = new mongoose.Schema({
     capsuleDescription: { type: String, required: false },
     files: [fileSchema], // Array of files
     unlockDate: { type: Date, required: true }, // Date when the capsule should be unlocked
+    lockDate: { type: Date, required: false }, // Optional lock date
     createdAt: { type: Date, default: Date.now },
     isCommunal: { type: Boolean, default: false } // Indicates if the capsule is communal
 });

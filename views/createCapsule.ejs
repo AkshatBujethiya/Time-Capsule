@@ -1,4 +1,3 @@
-<!-- filepath: /home/akshat/Time-Capsule/views/createCapsule.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +9,7 @@
 <body class="bg-gradient-to-r from-pink-500 to-purple-700 min-h-screen flex items-center justify-center p-6">
     <div class="bg-white rounded-lg p-8 shadow-lg w-full max-w-lg">
         <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Create New Capsule</h1>
-        <form action="/capsules/create" method="post" enctype="multipart/form-data">
+        <form action="/capsules/create" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
             <div class="mb-4">
                 <label for="capsuleName" class="block text-gray-700">Capsule Name</label>
                 <input name="capsuleName" type="text" placeholder="Capsule Name" class="mt-2 p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600" required>
@@ -63,6 +62,15 @@
             const fileName = this.files[0] ? this.files[0].name : "No file chosen";
             document.getElementById("fileName").textContent = fileName;
         });
+
+        function validateForm() {
+            const unlockDate = document.querySelector('input[name="unlockDate"]').value;
+            if (new Date(unlockDate) <= new Date()) {
+                alert('Unlock date must be in the future');
+                return false;
+            }
+            return true;
+        }
     </script>
 </body>
 </html>
