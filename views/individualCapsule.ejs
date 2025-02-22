@@ -18,5 +18,12 @@
     </ul>
     <p>Unlock Date: <%= new Date(capsule.unlockDate).toLocaleString() %></p>
     <p>Created At: <%= new Date(capsule.createdAt).toLocaleString() %></p>
+
+    <h2>Share this Capsule</h2>
+    <form action="/capsule/share" method="POST">
+        <input type="hidden" name="capsuleId" value="<%= capsule._id %>">
+        <input type="email" name="friendEmail" placeholder="Enter friend's email" required>
+        <button type="submit">Share</button>
+    </form>
 </body>
 </html>

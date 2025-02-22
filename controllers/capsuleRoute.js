@@ -51,8 +51,34 @@ capsuleRouter.get('/capsule/:capsuleId', isLoggedIn, async (req, res) => {
         console.error('Error retrieving capsule:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
-}
-);
+});
+
+capsuleRouter.post('/capsule/share', isLoggedIn, async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const { capsuleId, friendEmail } = req.body;
+
+        const user = await User.findById(userId);
+        const friend = await User.findOne({ email: friendEmail });
+
+        if (!user || !friend) {
+            return res.status(404).json({ message: 'User or friend not found' });
+        }
+
+        const capsule = user.capsules.id(capsuleId);
+        if (!capsule) {
+            return res.status(404).json({ message: 'Capsule not found' });
+        }
+
+        friend.sharedCapsules.push(capsule);
+        await friend.save();
+
+        res.redirect('/capsules');
+    } catch (error) {
+        console.error('Error sharing capsule:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 module.exports = capsuleRouter;
 

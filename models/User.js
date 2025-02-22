@@ -26,6 +26,7 @@ const userSchema = new mongoose.Schema({
     avatar: { type: String }, // URL to the user's profile picture
     capsules: [capsuleSchema], // Array of capsules
     friends: [friendSchema], // Array of friends
+    sharedCapsules: [capsuleSchema], // Array of shared capsules
     createdAt: { type: Date, default: Date.now }
 });
 
