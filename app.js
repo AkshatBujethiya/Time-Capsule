@@ -3,8 +3,8 @@ dotenv.config();
 const express = require('express')
 const express_session = require('express-session');
 const passport = require('passport');
-const importdb = require('./db');
-require('./auth');
+const importdb = require('./configs/db');
+require('./configs/auth');
 
 
 // Initialize express

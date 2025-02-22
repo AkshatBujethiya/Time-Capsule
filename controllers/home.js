@@ -1,6 +1,6 @@
 const {Router} = require('express');
 const HomeRouter = Router();
-const { isLoggedIn } = require('../auth');
+const { isLoggedIn } = require('../configs/auth');
 
 HomeRouter.get("/",(req,res)=>{
     res.render('home');
