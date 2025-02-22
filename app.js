@@ -1,13 +1,17 @@
-const dotenv=require('dotenv')
+const dotenv = require('dotenv')
 dotenv.config();
-const express=require('express')
-const express_session=require('express-session');
-const passport=require('passport');
+const express = require('express')
+const express_session = require('express-session');
+const passport = require('passport');
+const importdb = require('./db');
 require('./auth');
 
 
 // Initialize express
 const app=express();
+
+// Connect to database
+importdb();
 
 //Set-up express session
 app.use(express_session({
@@ -45,9 +49,14 @@ const cloudinary = require('cloudinary').v2;
 const AuthRouter = require('./controllers/authRoute');
 const HomeRouter = require('./controllers/home');
 const UploadRouter = require('./controllers/uploadRoute');
+const UserRouter = require('./controllers/userRoutes');
+const CapsuleRouter = require('./controllers/capsuleRoute');
+
+app.use('/', UserRouter);
 app.use('/', AuthRouter);
 app.use('/', HomeRouter);
 app.use('/', UploadRouter);
+app.use('/', CapsuleRouter);
 
 
 app.listen(process.env.PORT,()=>{
