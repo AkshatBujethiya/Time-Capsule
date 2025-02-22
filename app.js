@@ -18,15 +18,16 @@ app.use(express_session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+const path = require('path');
 const cors=require('cors')
 app.use(cors());
 
 // Set-up view engine
 app.set('view engine', 'ejs');
 app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
-// app.use(express.static(path.join(__dirname, 'public')));
-// app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 
 // Routes
