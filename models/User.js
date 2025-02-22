@@ -26,7 +26,9 @@ const userSchema = new mongoose.Schema({
     avatar: { type: String }, // URL to the user's profile picture
     capsules: [capsuleSchema], // Array of capsules
     friends: [friendSchema], // Array of friends
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    friendRequestsSent: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    friendRequestsReceived: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }]
 });
 
 const User = mongoose.model('User', userSchema);

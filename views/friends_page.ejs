@@ -12,18 +12,46 @@
         <h1>Your Friends</h1>
     </header>
     <main class="container mt-4">
-        <form action="/friends/add" method="POST" class="form-inline mb-4">
+        <!-- Send Friend Request -->
+        <form action="/friends/request" method="POST" class="form-inline mb-4">
             <div class="form-group mr-2">
                 <input type="email" name="friendEmail" class="form-control" placeholder="Enter friend's email" required>
             </div>
-            <button type="submit" class="btn btn-primary">Add Friend</button>
+            <button type="submit" class="btn btn-primary">Send Request</button>
         </form>
+
+        <!-- Pending Friend Requests -->
+        <h3>Pending Requests</h3>
+        <ul class="list-group">
+            <% if (pendingRequests.length > 0) { %>
+                <% pendingRequests.forEach(function(request) { %>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <%= request.email %>
+                        <div>
+                            <form action="/friends/accept" method="POST" class="d-inline">
+                                <input type="hidden" name="friendId" value="<%= request._id %>">
+                                <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                            </form>
+                            <form action="/friends/reject" method="POST" class="d-inline">
+                                <input type="hidden" name="friendId" value="<%= request._id %>">
+                                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                            </form>
+                        </div>
+                    </li>
+                <% }); %>
+            <% } else { %>
+                <li class="list-group-item">No pending requests.</li>
+            <% } %>
+        </ul>
+
+        <!-- Friends List -->
+        <h3 class="mt-4">Your Friends</h3>
         <ul class="list-group">
             <% if (friends.length > 0) { %>
                 <% friends.forEach(function(friend) { %>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <%= friend.email %>
-                        <form action="/friends/remove" method="POST" class="form-inline">
+                        <form action="/friends/remove" method="POST">
                             <input type="hidden" name="friendEmail" value="<%= friend.email %>">
                             <button type="submit" class="btn btn-danger btn-sm">Remove</button>
                         </form>
@@ -34,6 +62,7 @@
             <% } %>
         </ul>
     </main>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

@@ -1,27 +1,36 @@
-const { Router } = require('express');
+const { Router } = require("express");
 const FriendRouter = Router();
-const User = require('../models/User');
-const { isLoggedIn } = require('../configs/auth');
-const { addFriend, removeFriend } = require('../configs/friendController');
+const User = require("../models/User");
+const { isLoggedIn } = require("../configs/auth");
 
-FriendRouter.get('/friends', isLoggedIn, async (req, res) => {
+// ✅ Get Friends & Pending Requests
+FriendRouter.get("/friends", isLoggedIn, async (req, res) => {
     try {
-        const userId = req.user._id; // Get the authenticated user's ID
+        const userId = req.user._id;
 
-        // Find the user and their friends
-        const user = await User.findById(userId);
+        // Get user details with friends & pending requests
+        const user = await User.findById(userId)
+            .populate("friends", "name email")
+            .populate("friendRequestsSent", "name email")
+            .populate("friendRequestsReceived", "name email");
+
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ message: "User not found" });
         }
 
-        res.render('friends_page', { friends: user.friends, user });
+        res.render("friends_page", {
+            friends: user.friends,
+            pendingRequests: user.friendRequestsReceived,
+            user,
+        });
     } catch (error) {
-        console.error('Error retrieving friends:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        console.error("Error retrieving friends:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 });
 
-FriendRouter.post('/friends/add', isLoggedIn, async (req, res) => {
+// ✅ Send Friend Request
+FriendRouter.post("/friends/request", isLoggedIn, async (req, res) => {
     try {
         const userId = req.user._id;
         const friendEmail = req.body.friendEmail;
@@ -30,41 +39,110 @@ FriendRouter.post('/friends/add', isLoggedIn, async (req, res) => {
         const friend = await User.findOne({ email: friendEmail });
 
         if (!user || !friend) {
-            return res.status(404).json({ message: 'User or friend not found' });
+            return res.status(404).json({ message: "User not found" });
         }
 
-        user.friends.push({
-            googleId: friend.googleId,
-            name: friend.name,
-            email: friend.email
-        });
+        // Prevent duplicate requests or existing friendships
+        if (user.friends.includes(friend._id) || user.friendRequestsSent.includes(friend._id)) {
+            return res.status(400).json({ message: "Friend request already sent or already a friend" });
+        }
+
+        // Add to friend request lists
+        user.friendRequestsSent.push(friend._id);
+        friend.friendRequestsReceived.push(user._id);
 
         await user.save();
-        res.redirect('/friends');
+        await friend.save();
+
+        res.redirect("/friends");
     } catch (error) {
-        console.error('Error adding friend:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        console.error("Error sending friend request:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 });
 
-FriendRouter.post('/friends/remove', isLoggedIn, async (req, res) => {
+// ✅ Accept Friend Request
+FriendRouter.post("/friends/accept", isLoggedIn, async (req, res) => {
     try {
         const userId = req.user._id;
-        const friendEmail = req.body.friendEmail;
+        const friendId = req.body.friendId;
 
         const user = await User.findById(userId);
+        const friend = await User.findById(friendId);
 
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+        if (!user || !friend) {
+            return res.status(404).json({ message: "User not found" });
         }
 
-        user.friends = user.friends.filter(friend => friend.email !== friendEmail);
+        // Add to friends list
+        user.friends.push(friend._id);
+        friend.friends.push(user._id);
+
+        // Remove from pending lists
+        user.friendRequestsReceived = user.friendRequestsReceived.filter(id => id.toString() !== friendId);
+        friend.friendRequestsSent = friend.friendRequestsSent.filter(id => id.toString() !== user._id);
 
         await user.save();
-        res.redirect('/friends');
+        await friend.save();
+
+        res.redirect("/friends");
     } catch (error) {
-        console.error('Error removing friend:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        console.error("Error accepting friend request:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+// ✅ Reject Friend Request
+FriendRouter.post("/friends/reject", isLoggedIn, async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const friendId = req.body.friendId;
+
+        const user = await User.findById(userId);
+        const friend = await User.findById(friendId);
+
+        if (!user || !friend) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Remove from pending requests
+        user.friendRequestsReceived = user.friendRequestsReceived.filter(id => id.toString() !== friendId);
+        friend.friendRequestsSent = friend.friendRequestsSent.filter(id => id.toString() !== user._id);
+
+        await user.save();
+        await friend.save();
+
+        res.redirect("/friends");
+    } catch (error) {
+        console.error("Error rejecting friend request:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+// ✅ Remove Friend
+FriendRouter.post("/friends/remove", isLoggedIn, async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const friendId = req.body.friendId;
+
+        const user = await User.findById(userId);
+        const friend = await User.findById(friendId);
+
+        if (!user || !friend) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Remove friend from both users
+        user.friends = user.friends.filter(id => id.toString() !== friendId);
+        friend.friends = friend.friends.filter(id => id.toString() !== user._id);
+
+        await user.save();
+        await friend.save();
+
+        res.redirect("/friends");
+    } catch (error) {
+        console.error("Error removing friend:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 });
 
