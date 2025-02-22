@@ -54,6 +54,7 @@ const HomeRouter = require('./controllers/home');
 const UploadRouter = require('./controllers/uploadRoute');
 const UserRouter = require('./controllers/userRoutes');
 const CapsuleRouter = require('./controllers/capsuleRoute');
+const FriendRouter = require('./controllers/friendRoute');
 const { url } = require('inspector');
 
 app.use('/', UserRouter);
@@ -61,6 +62,7 @@ app.use('/', AuthRouter);
 app.use('/', HomeRouter);
 app.use('/', UploadRouter);
 app.use('/', CapsuleRouter);
+app.use('/', FriendRouter);
 
 
 app.listen(process.env.PORT,()=>{
