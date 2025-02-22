@@ -1,11 +1,28 @@
 const dotenv=require('dotenv')
 dotenv.config();
 const express=require('express')
+const express_session=require('express-session');
+const passport=require('passport');
+require('./auth');
+
+
+// Initialize express
 const app=express();
+
+//Set-up express session
+app.use(express_session({
+    secret:process.env.SESSION_SECRET,
+    resave:false,
+    saveUninitialized:true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 const path = require('path');
 const cors=require('cors')
 app.use(cors());
 
+// Set-up view engine
 app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -37,7 +54,10 @@ app.get('/story',(req,res)=>{
 app.get('/contact',(req,res)=>{
     res.render('contact')
 })
-
+const AuthRouter = require('./controllers/authRoute');
+const HomeRouter = require('./controllers/home');
+app.use('/', AuthRouter);
+app.use('/', HomeRouter);
 
 
 app.listen(process.env.PORT,()=>{
@@ -45,4 +65,4 @@ app.listen(process.env.PORT,()=>{
 });
 
 
-module.exports=app;
+module.exports = app;
