@@ -21,23 +21,55 @@ capsuleRouter.get('/capsules', isLoggedIn, async (req, res) => {
         const lockedCapsules = user.capsules.filter(capsule => capsule.unlockDate > currentDate);
         
         console.log(unlockedCapsules, lockedCapsules);
-        res.render('myCapsules', { unlockedCapsules, lockedCapsules, user,username: req.user.name });
+        res.render('myCapsules', { unlockedCapsules, lockedCapsules, user, username: req.user.name });
     } catch (error) {
         console.error('Error retrieving capsules:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
 
+capsuleRouter.get('/capsules/create', isLoggedIn, (req, res) => {
+    res.render('createCapsule');
+});
+
 capsuleRouter.post('/capsules/create', isLoggedIn, async (req, res) => {
     try {
-        await createCapsule(req, res);
+        const { capsuleName, capsuleDescription, unlockDate, lockOption, lockDate } = req.body;
+        const userId = req.user._id; // Get the authenticated user's ID
+
+        // Validate the unlock date
+        if (new Date(unlockDate) <= new Date()) {
+            return res.status(400).json({ message: 'Unlock date must be in the future' });
+        }
+
+        // Find the user and add the new capsule
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const capsule = {
+            capsuleName,
+            capsuleDescription,
+            unlockDate: new Date(unlockDate),
+            createdAt: new Date(),
+            isCommunal: false,
+            files: []
+        };
+
+        if (lockOption === 'specified' && lockDate) {
+            capsule.lockDate = new Date(lockDate);
+        }
+
+        user.capsules.push(capsule);
+        await user.save();
+
         res.redirect('/dashboard'); // Redirect to dashboard after creation
     } catch (error) {
         console.error("Error creating capsule:", error);
         res.status(500).send("Internal Server Error");
     }
 });
-
 
 capsuleRouter.get('/capsule/:capsuleId', isLoggedIn, async (req, res) => {
     try {
@@ -55,7 +87,7 @@ capsuleRouter.get('/capsule/:capsuleId', isLoggedIn, async (req, res) => {
             return res.status(404).json({ message: 'Capsule not found' });
         }
     
-        res.render('individualCapsule',{capsule:capsule,username: req.user.name});
+        res.render('individualCapsule', { capsule: capsule, username: req.user.name });
     } catch (error) {
         console.error('Error retrieving capsule:', error);
         res.status(500).json({ message: 'Internal server error' });

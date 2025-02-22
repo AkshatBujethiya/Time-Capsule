@@ -1,0 +1,68 @@
+<!-- filepath: /home/akshat/Time-Capsule/views/createCapsule.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Capsule</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-pink-500 to-purple-700 min-h-screen flex items-center justify-center p-6">
+    <div class="bg-white rounded-lg p-8 shadow-lg w-full max-w-lg">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Create New Capsule</h1>
+        <form action="/capsules/create" method="post" enctype="multipart/form-data">
+            <div class="mb-4">
+                <label for="capsuleName" class="block text-gray-700">Capsule Name</label>
+                <input name="capsuleName" type="text" placeholder="Capsule Name" class="mt-2 p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+            </div>
+            <div class="mb-4">
+                <label for="capsuleDescription" class="block text-gray-700">Capsule Description (Optional)</label>
+                <textarea name="capsuleDescription" placeholder="Capsule Description" class="mt-2 p-3 border rounded w-full h-24 focus:outline-none focus:ring-2 focus:ring-blue-600"></textarea>
+            </div>
+            <div class="mb-4">
+                <label for="fileInput" class="block text-gray-700">Select Files</label>
+                <input id="fileInput" type="file" name="files" class="hidden" multiple required>
+                <div class="flex items-center mt-2">
+                    <label for="fileInput" class="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700 transition">Choose Files</label>
+                    <span id="fileName" class="ml-3 text-gray-600">No file chosen</span>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label for="unlockDate" class="block text-gray-700">Unlock Date & Time</label>
+                <input name="unlockDate" type="datetime-local" class="mt-2 p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+            </div>
+            <div class="mb-4">
+                <label for="lockOption" class="block text-gray-700">Lock Option</label>
+                <select name="lockOption" id="lockOption" class="mt-2 p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+                    <option value="immediate">Lock Immediately</option>
+                    <option value="specified">Lock at Specified Date</option>
+                </select>
+            </div>
+            <div class="mb-4" id="lockDateContainer" style="display: none;">
+                <label for="lockDate" class="block text-gray-700">Lock Date & Time</label>
+                <input name="lockDate" type="datetime-local" class="mt-2 p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600">
+            </div>
+            <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg mt-6 hover:bg-blue-700 transition w-full">Save Capsule</button>
+        </form>
+    </div>
+
+    <script>
+        const lockOption = document.getElementById('lockOption');
+        const lockDateContainer = document.getElementById('lockDateContainer');
+
+        lockOption.addEventListener('change', function() {
+            if (this.value === 'specified') {
+                lockDateContainer.style.display = 'block';
+            } else {
+                lockDateContainer.style.display = 'none';
+            }
+        });
+
+        // Update file name on selection
+        document.getElementById("fileInput").addEventListener("change", function() {
+            const fileName = this.files[0] ? this.files[0].name : "No file chosen";
+            document.getElementById("fileName").textContent = fileName;
+        });
+    </script>
+</body>
+</html>
