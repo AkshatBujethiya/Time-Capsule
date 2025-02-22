@@ -11,42 +11,47 @@ UploadRouter.get('/upload', isLoggedIn, (req, res) => {
 });
 
 // Handle file upload
-UploadRouter.post('/upload', isLoggedIn, upload.single('file'), async (req, res) => {
+UploadRouter.post('/upload', isLoggedIn, upload.array('files', 10), async (req, res) => {
     try {
-        // Upload the file to Cloudinary
-        cloudinary.uploader.upload(req.file.path, async (err, result) => {
-            if (err) {
-                console.error('Error uploading to Cloudinary:', err);
-                return res.status(500).json({ message: 'Error uploading file' });
-            }
-
-            // Get the authenticated user's ID
-            const userId = req.user._id;
-            console.log(userId);
-            // Find the user and add the file URL to their profile
-            const user = await User.findById(userId);
-            if (!user) {
-                return res.status(404).json({ message: 'User not found' });
-            }
-            // Create a new file object
-            const file = {
-                fileName: req.file.originalname,
-                fileUrl: result.secure_url
-            };
-            // Create a new capsule object
-            const capsule = {
-                capsuleName: req.body.capsuleName,
-                capsuleDescription: req.body.capsuleDescription,
-                files: [file],
-                unlockDate: new Date(req.body.unlockDate),
-                createdAt: new Date()
-            };
-            // Add the capsule to the user's capsules array
-            user.capsules.push(capsule);
-            await user.save();
-            console.log("4")
-            res.redirect('/');
+        const uploadPromises = req.files.map(file => {
+            return new Promise((resolve, reject) => {
+                cloudinary.uploader.upload(file.path, (err, result) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve({
+                            fileName: file.originalname,
+                            fileUrl: result.secure_url
+                        });
+                    }
+                });
+            });
         });
+
+        const uploadedFiles = await Promise.all(uploadPromises);
+
+        // Get the authenticated user's ID
+        const userId = req.user._id;
+        console.log(userId);
+        // Find the user and add the file URLs to their profile
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Create a new capsule object
+        const capsule = {
+            capsuleName: req.body.capsuleName,
+            capsuleDescription: req.body.capsuleDescription,
+            files: uploadedFiles,
+            unlockDate: new Date(req.body.unlockDate),
+            createdAt: new Date()
+        };
+
+        // Add the capsule to the user's capsules array
+        user.capsules.push(capsule);
+        await user.save();
+        res.redirect('/');
     } catch (error) {
         console.error('Error handling file upload:', error);
         res.status(500).json({ message: 'Internal server error' });

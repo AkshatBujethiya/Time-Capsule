@@ -58,15 +58,15 @@
 
     <!-- Capsule Modal (Hidden by Default) -->
     <div id="capsuleModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-lg p-6 w-96 shadow-lg relative">
+        <div class="bg-white rounded-lg p-8 w-96 shadow-lg relative glass">
             <button id="closeCapsule" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-lg">❌</button>
-            <h2 class="text-xl font-bold text-gray-800">Create New Capsule</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Create New Capsule</h2>
             <form action="/upload" method="post" enctype="multipart/form-data">
-                <input name="capsuleName" type="text" placeholder="Capsule Name" class="mt-4 p-2 border rounded w-full" required>
-                <textarea name="capsuleDescription" placeholder="Capsule Description (Optional)" class="mt-2 p-2 border rounded w-full h-24"></textarea>
-                <input type="file" name="file" required>
-                <input name="unlockDate" type="datetime-local" class="mt-2 p-2 border rounded w-full" required>
-                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition w-full">
+                <input name="capsuleName" type="text" placeholder="Capsule Name" class="mt-4 p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+                <textarea name="capsuleDescription" placeholder="Capsule Description (Optional)" class="mt-4 p-3 border rounded w-full h-24 focus:outline-none focus:ring-2 focus:ring-blue-600"></textarea>
+                <input type="file" name="files" class="mt-4 p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600" multiple required>
+                <input name="unlockDate" type="datetime-local" class="mt-4 p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+                <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg mt-6 hover:bg-blue-700 transition w-full"></button>
                     Save Capsule
                 </button>
             </form>
