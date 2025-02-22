@@ -28,13 +28,11 @@ UploadRouter.post('/upload', isLoggedIn, upload.single('file'), async (req, res)
             if (!user) {
                 return res.status(404).json({ message: 'User not found' });
             }
-            console.log("1")
             // Create a new file object
             const file = {
                 fileName: req.file.originalname,
                 fileUrl: result.secure_url
             };
-            console.log("2")
             // Create a new capsule object
             const capsule = {
                 capsuleName: req.body.capsuleName,
@@ -43,13 +41,11 @@ UploadRouter.post('/upload', isLoggedIn, upload.single('file'), async (req, res)
                 unlockDate: new Date(req.body.unlockDate),
                 createdAt: new Date()
             };
-            console.log(req.body);
-            console.log(capsule);
             // Add the capsule to the user's capsules array
             user.capsules.push(capsule);
             await user.save();
             console.log("4")
-            res.status(200).json({ message: 'File uploaded successfully', fileUrl: result.secure_url });
+            res.redirect('/');
         });
     } catch (error) {
         console.error('Error handling file upload:', error);
