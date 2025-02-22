@@ -28,13 +28,26 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Cloudinary setup
+const cloudinary = require('cloudinary').v2;
 
+(async function() {
+
+    // Configuration
+    cloudinary.config({ 
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+        api_key: process.env.CLOUDINARY_API_KEY, 
+        api_secret: process.env.CLOUDINARY_SECRET
+    });   
+})();
 
 // Routes
 const AuthRouter = require('./controllers/authRoute');
 const HomeRouter = require('./controllers/home');
+const UploadRouter = require('./controllers/uploadRoute');
 app.use('/', AuthRouter);
 app.use('/', HomeRouter);
+app.use('/', UploadRouter);
 
 
 app.listen(process.env.PORT,()=>{
