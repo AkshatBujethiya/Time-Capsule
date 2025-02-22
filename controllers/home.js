@@ -11,6 +11,9 @@ HomeRouter.get("/dashboard", isLoggedIn, (req,res)=>{
     res.render(`dashboard`);
 });
 
+HomeRouter.get("/contact", (req,res)=>{
+    res.render(`contact`);
+});
 
 HomeRouter.get("/myaccount", isLoggedIn, (req, res) => {
     res.render('myaccount', { 

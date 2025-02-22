@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= capsule.capsuleName %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<<<<<<< HEAD
 <body>
     <h1><%= capsule.capsuleName %></h1>
     <p><%= capsule.capsuleDescription %></p>
@@ -25,5 +27,48 @@
         <input type="email" name="friendEmail" placeholder="Enter friend's email" required>
         <button type="submit">Share</button>
     </form>
+=======
+<body class="bg-gradient-to-r from-pink-500 to-purple-700 min-h-screen flex justify-center items-center p-6">
+
+    <!-- Capsule Details Container -->
+    <div class="relative bg-white bg-opacity-90 shadow-lg rounded-lg p-8 w-full max-w-lg text-center">
+        
+        <!-- Back Button + Clickable Image -->
+        <div class="absolute left-4 top-4 flex items-center space-x-2">
+            <!-- Go Back Button -->
+            <a href="/capsules" class="bg-white bg-opacity-80 text-gray-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition">🔙 </a>
+            
+            <!-- Clickable Image (Redirects to Dashboard) -->
+            <a href="/dashboard">
+                <img src="/images/background1.png" alt="Virtual Time Capsule" class="w-8 h-8 object-contain hover:opacity-80 transition">
+            </a>
+        </div>
+        
+        <!-- Capsule Name -->
+        <h1 class="text-3xl font-bold text-gray-900 mb-4"><%= capsule.capsuleName %></h1>
+        
+        <!-- Capsule Description -->
+        <p class="text-lg text-gray-700 mb-6"><%= capsule.capsuleDescription %></p>
+
+        <!-- Files Section -->
+        <h2 class="text-2xl font-semibold text-gray-900 mb-4">Attached Files</h2>
+        <ul class="space-y-2 text-left">
+            <% capsule.files.forEach(function(file) { %>
+                <li class="bg-gray-100 rounded-lg p-3 hover:bg-gray-200 transition">
+                    <a href="<%= file.fileUrl %>" target="_blank" class="text-blue-500 font-medium hover:underline">
+                        📎 <%= file.fileName %>
+                    </a>
+                </li>
+            <% }); %>
+        </ul>
+
+        <!-- Dates Section -->
+        <div class="mt-6 text-gray-800">
+            <p class="mb-2"><strong>📅 Unlock Date:</strong> <%= new Date(capsule.unlockDate).toLocaleString() %></p>
+            <p><strong>🕰️ Created At:</strong> <%= new Date(capsule.createdAt).toLocaleString() %></p>
+        </div>
+    </div>
+
+>>>>>>> 6f1be850edf35fd3f1aa8d29c9006d9ddc0f334a
 </body>
 </html>
