@@ -54,6 +54,19 @@ app.get('/story',(req,res)=>{
 app.get('/contact',(req,res)=>{
     res.render('contact')
 })
+
+app.get('/profile',(req,res)=>{
+    res.render('profile')
+})
+
+app.get('/myaccount',(req,res)=>{
+    res.render('myaccount')
+})
+
+app.get('/capsule',(req,res)=>{
+    res.render('capsule')
+})
+
 const AuthRouter = require('./controllers/authRoute');
 const HomeRouter = require('./controllers/home');
 app.use('/', AuthRouter);
