@@ -3,7 +3,7 @@ const passport = require('passport');
 const AuthRouter = Router();
 
 AuthRouter.get('/login', (req, res) => {
-    res.send('<a href="/auth/google">Login with Google</a>');
+    res.render('login');
 });
 
 AuthRouter.get('/auth/google',
@@ -12,7 +12,7 @@ AuthRouter.get('/auth/google',
 
 AuthRouter.get('/google/callback',
     passport.authenticate( 'google', {
-        successRedirect: '/about',
+        successRedirect: '/dashboard',
         failureRedirect: '/auth/google/failure'
 }));
 

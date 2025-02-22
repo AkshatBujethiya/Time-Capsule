@@ -1,13 +1,17 @@
-const dotenv=require('dotenv')
+const dotenv = require('dotenv')
 dotenv.config();
-const express=require('express')
-const express_session=require('express-session');
-const passport=require('passport');
+const express = require('express')
+const express_session = require('express-session');
+const passport = require('passport');
+const importdb = require('./db');
 require('./auth');
 
 
 // Initialize express
 const app=express();
+
+// Connect to database
+importdb();
 
 //Set-up express session
 app.use(express_session({
@@ -28,49 +32,31 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Cloudinary setup
+const cloudinary = require('cloudinary').v2;
 
+(async function() {
+
+    // Configuration
+    cloudinary.config({ 
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+        api_key: process.env.CLOUDINARY_API_KEY, 
+        api_secret: process.env.CLOUDINARY_SECRET
+    });   
+})();
 
 // Routes
-// const AuthRouter = require('./Controllers/auth');
-// const HomeRouter = require('./Controllers/home');
-// app.use('/', AuthRouter);
-// app.use('/', HomeRouter);
-
-
-
-
-app.get('/', (req, res) =>{
-    res.render('home');
-})
-
-app.get('/login', (req, res) => {
-    res.render('login');
-});
-
-app.get('/story',(req,res)=>{
-    res.render('story')
-})
-
-app.get('/contact',(req,res)=>{
-    res.render('contact')
-})
-
-app.get('/profile',(req,res)=>{
-    res.render('profile')
-})
-
-app.get('/myaccount',(req,res)=>{
-    res.render('myaccount')
-})
-
-app.get('/capsule',(req,res)=>{
-    res.render('capsule')
-})
-
 const AuthRouter = require('./controllers/authRoute');
 const HomeRouter = require('./controllers/home');
+const UploadRouter = require('./controllers/uploadRoute');
+const UserRouter = require('./controllers/userRoutes');
+const CapsuleRouter = require('./controllers/capsuleRoute');
+
+app.use('/', UserRouter);
 app.use('/', AuthRouter);
 app.use('/', HomeRouter);
+app.use('/', UploadRouter);
+app.use('/', CapsuleRouter);
 
 
 app.listen(process.env.PORT,()=>{
