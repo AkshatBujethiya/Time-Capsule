@@ -11,6 +11,7 @@ const capsuleSchema = new mongoose.Schema({
     files: [fileSchema], // Array of files
     unlockDate: { type: Date, required: true }, // Date when the capsule should be unlocked
     createdAt: { type: Date, default: Date.now },
+    isCommunal: { type: Boolean, default: false } // Indicates if the capsule is communal
 });
 
 const friendSchema = new mongoose.Schema({

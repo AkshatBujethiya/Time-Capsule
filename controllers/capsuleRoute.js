@@ -20,7 +20,6 @@ capsuleRouter.get('/capsules', isLoggedIn, async (req, res) => {
         const unlockedCapsules = user.capsules.filter(capsule => capsule.unlockDate <= currentDate);
         const lockedCapsules = user.capsules.filter(capsule => capsule.unlockDate > currentDate);
         
-        console.log(unlockedCapsules, lockedCapsules);
         res.render('myCapsules', { unlockedCapsules, lockedCapsules, user });
     } catch (error) {
         console.error('Error retrieving capsules:', error);
@@ -76,6 +75,30 @@ capsuleRouter.post('/capsule/share', isLoggedIn, async (req, res) => {
         res.redirect('/capsules');
     } catch (error) {
         console.error('Error sharing capsule:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+capsuleRouter.get('/sharedcapsule', isLoggedIn, async (req, res) => {
+    try {
+        const userId = req.user._id; // Get the authenticated user's ID
+
+        // Find the user and their shared capsules
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Find all communal capsules
+        const communalCapsules = await User.aggregate([
+            { $unwind: "$capsules" },
+            { $match: { "capsules.isCommunal": true } },
+            { $replaceRoot: { newRoot: "$capsules" } }
+        ]);
+
+        res.render('sharedCapsules', { sharedCapsules: user.sharedCapsules, communalCapsules });
+    } catch (error) {
+        console.error('Error retrieving shared and communal capsules:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
