@@ -12,6 +12,19 @@
             border-radius: 15px;
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
+        .modal {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .hidden {
+            opacity: 0;
+            transform: scale(0.9);
+            pointer-events: none;
+        }
+        .visible {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-r from-pink-500 to-purple-700 h-screen flex">
@@ -43,8 +56,9 @@
         <div class="bg-white shadow-lg p-10 glass flex flex-col items-center">
             <h1 class="text-3xl font-bold text-blue-800">Welcome!</h1>
             <p class="text-gray-600 mt-2">
-                Create your first capsule and document what it's like at each grade or level of school!
+                Create your first capsule and document your journey!
             </p>
+            
             <!-- Centered Image -->
             <img src="/images/background9.png" alt="Graduation" class="w-40 mt-6 rounded-lg shadow-md">
             
@@ -56,16 +70,26 @@
         </div>
     </main>
 
-    <!-- Capsule Modal (Hidden by Default) -->
-    <div id="capsuleModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+    <!-- Capsule Modal -->
+    <div id="capsuleModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden modal">
         <div class="bg-white rounded-lg p-6 w-96 shadow-lg relative">
             <button id="closeCapsule" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-lg">❌</button>
             <h2 class="text-xl font-bold text-gray-800">Create New Capsule</h2>
             <form action="/upload" method="post" enctype="multipart/form-data">
                 <input name="capsuleName" type="text" placeholder="Capsule Name" class="mt-4 p-2 border rounded w-full" required>
                 <textarea name="capsuleDescription" placeholder="Capsule Description (Optional)" class="mt-2 p-2 border rounded w-full h-24"></textarea>
-                <input type="file" name="file" required>
-                <input name="unlockDate" type="datetime-local" class="mt-2 p-2 border rounded w-full" required>
+
+                <!-- Custom File Input -->
+                <label for="fileInput" class="block mt-2 text-gray-700 font-semibold">Attach File</label>
+                <div class="mt-1 flex items-center space-x-4">
+                    <label for="fileInput" class="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-700 transition">
+                        Choose File
+                    </label>
+                    <input type="file" name="file" id="fileInput" class="hidden">
+                    <span id="fileName" class="text-gray-600">No file chosen</span>
+                </div>
+
+                <input name="unlockDate" type="datetime-local" class="mt-4 p-2 border rounded w-full" required>
                 <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition w-full">
                     Save Capsule
                 </button>
@@ -82,20 +106,32 @@
 
     <!-- JavaScript for Capsule Popup -->
     <script>
-        document.getElementById("openCapsule").addEventListener("click", function() {
-            document.getElementById("capsuleModal").classList.remove("hidden");
+        const openModal = document.getElementById("openCapsule");
+        const closeModal = document.getElementById("closeCapsule");
+        const modal = document.getElementById("capsuleModal");
+        
+        openModal.addEventListener("click", function() {
+            modal.classList.remove("hidden");
+            modal.classList.add("visible");
         });
 
-        document.getElementById("closeCapsule").addEventListener("click", function() {
-            document.getElementById("capsuleModal").classList.add("hidden");
+        closeModal.addEventListener("click", function() {
+            modal.classList.remove("visible");
+            modal.classList.add("hidden");
         });
 
         // Close modal when clicking outside
         window.addEventListener("click", function(event) {
-            let modal = document.getElementById("capsuleModal");
             if (event.target === modal) {
+                modal.classList.remove("visible");
                 modal.classList.add("hidden");
             }
+        });
+
+        // Update file name on selection
+        document.getElementById("fileInput").addEventListener("change", function() {
+            const fileName = this.files[0] ? this.files[0].name : "No file chosen";
+            document.getElementById("fileName").textContent = fileName;
         });
     </script>
 
