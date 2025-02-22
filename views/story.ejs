@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Who Is VTC?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Fade-in Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hover effect on points */
+        .hover-glow:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <nav class="bg-white shadow-md py-2 px-8 flex justify-between items-center">
+        <div class="flex items-center">
+            <img src="/images/background1.png" alt="Virtual Time Capsule" class="w-6 h-6 object-contain">
+            <span class="text-xl font-bold text-blue-700">Time Capsule</span>
+        </div>
+        <div class="space-x-6">
+            <a href="/" class="text-gray-700 hover:text-blue-600">Home</a>
+            <a href="/story" class="text-gray-700 hover:text-blue-600">Our Story</a>
+            <a href="/contact" class="text-gray-700 hover:text-blue-600">Contact Us</a>
+            <a href="/login" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Get Started</a>
+        </div>
+    </nav>
+
+
+    <div class="bg-gradient-to-r from-pink-400 to-purple-700 flex justify-center items-center min-h-screen p-6">
+        <section class="bg-gray-800 text-white px-10 py-12 w-full max-w-3xl rounded-lg shadow-2xl fade-in">
+            <h1 class="text-4xl font-extrabold text-center mb-6 animate-bounce">What Is Time Capsule?</h1>
+            
+            <p class="text-lg text-center mb-6">
+               Time Capsule  is an innovative platform designed to preserve and share your most cherished memories. 
+                Whether it's a heartfelt message, a nostalgic voice recording, or a priceless video, TC ensures that your stories 
+                and wisdom live on for generations to come.
+            </p>
+    
+            <div class="space-y-4">
+                <div class="p-4 bg-gray-700 rounded-lg hover-glow">
+                    <h2 class="text-xl font-bold">🕰️ Preserve Memories Forever</h2>
+                    <p>Capture and store messages, photos, videos, and voice recordings to be delivered in the future.</p>
+                </div>
+    
+                <div class="p-4 bg-gray-700 rounded-lg hover-glow">
+                    <h2 class="text-xl font-bold">📅 Schedule Future Deliveries</h2>
+                    <p>Send messages to your loved ones on special occasions, milestones, or even decades later.</p>
+                </div>
+    
+                <div class="p-4 bg-gray-700 rounded-lg hover-glow">
+                    <h2 class="text-xl font-bold">🔒 Secure & Private</h2>
+                    <p>Your messages are encrypted and safely stored, ensuring privacy until the chosen delivery date.</p>
+                </div>
+    
+                <div class="p-4 bg-gray-700 rounded-lg hover-glow">
+                    <h2 class="text-xl font-bold">💌 Leave a Legacy</h2>
+                    <p>Pass down life lessons, personal stories, and heartfelt words to future generations.</p>
+                </div>
+    
+                <div class="p-4 bg-gray-700 rounded-lg hover-glow">
+                    <h2 class="text-xl font-bold">🌍 Connect Across Time</h2>
+                    <p>Imagine sending a message to your grandchildren or reminding your future self of an important moment.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+    
+
+</body>
+</html>

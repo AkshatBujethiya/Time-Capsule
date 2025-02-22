@@ -14,10 +14,29 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // Routes
-const AuthRouter = require('./Controllers/auth');
-const HomeRouter = require('./Controllers/home');
-app.use('/', AuthRouter);
-app.use('/', HomeRouter);
+// const AuthRouter = require('./Controllers/auth');
+// const HomeRouter = require('./Controllers/home');
+// app.use('/', AuthRouter);
+// app.use('/', HomeRouter);
+
+
+
+
+app.get('/', (req, res) =>{
+    res.render('home');
+})
+
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
+app.get('/story',(req,res)=>{
+    res.render('story')
+})
+
+app.get('/contact',(req,res)=>{
+    res.render('contact')
+})
 
 
 
