@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header class="bg-primary text-white text-center py-3">
+        <h1>Your Friends</h1>
+    </header>
+    <main class="container mt-4">
+        <form action="/friends/add" method="POST" class="form-inline mb-4">
+            <div class="form-group mr-2">
+                <input type="email" name="friendEmail" class="form-control" placeholder="Enter friend's email" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Friend</button>
+        </form>
+        <ul class="list-group">
+            <% if (friends.length > 0) { %>
+                <% friends.forEach(function(friend) { %>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <%= friend.email %>
+                        <form action="/friends/remove" method="POST" class="form-inline">
+                            <input type="hidden" name="friendEmail" value="<%= friend.email %>">
+                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                        </form>
+                    </li>
+                <% }); %>
+            <% } else { %>
+                <li class="list-group-item">You have no friends added yet.</li>
+            <% } %>
+        </ul>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

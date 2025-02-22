@@ -13,12 +13,19 @@ const capsuleSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
 });
 
+const friendSchema = new mongoose.Schema({
+    googleId: { type: String, required: true },
+    name: { type: String, required: true },
+    email: { type: String, required: true }
+});
+
 const userSchema = new mongoose.Schema({
     googleId: { type: String, required: true, unique: true },
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     avatar: { type: String }, // URL to the user's profile picture
-    capsules: [capsuleSchema], // Array of file URLs (e.g., Cloudinary URLs)
+    capsules: [capsuleSchema], // Array of capsules
+    friends: [friendSchema], // Array of friends
     createdAt: { type: Date, default: Date.now }
 });
 
