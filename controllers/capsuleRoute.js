@@ -22,8 +22,8 @@ capsuleRouter.get('/capsules', isLoggedIn, async (req, res) => {
         // Separate capsules into unlocked, locked, and open based on the unlock date and lock date
         const currentDate = new Date();
         const unlockedCapsules = user.capsules.filter(capsule => capsule.unlockDate <= currentDate && (!capsule.lockDate || capsule.lockDate <= currentDate));
-        const lockedCapsules = user.capsules.filter(capsule => capsule.unlockDate > currentDate && capsule.lockDate && capsule.lockDate <= currentDate);
-        const openCapsules = user.capsules.filter(capsule => capsule.lockDate && capsule.lockDate > currentDate && capsule.unlockDate <= currentDate);
+        const lockedCapsules = user.capsules.filter(capsule => capsule.unlockDate > currentDate);
+        const openCapsules = user.capsules.filter(capsule => capsule.unlockDate <= currentDate && capsule.lockDate && capsule.lockDate > currentDate);
         
         res.render('myCapsules', { unlockedCapsules, lockedCapsules, openCapsules, user, username: req.user.name });
     } catch (error) {
@@ -248,7 +248,13 @@ capsuleRouter.get('/capsule/:email/:capsuleId', isLoggedIn, async (req, res) => 
         if (!capsule) {
             return res.status(404).json({ message: 'Capsule not found' });
         }
-        console.log(capsule);
+
+        // Check if the capsule is unlocked
+        const currentDate = new Date();
+        if (capsule.unlockDate > currentDate) {
+            return res.status(403).json({ message: 'Capsule is not yet unlocked' });
+        }
+
         res.render('individualCapsule', { capsule, email, user: req.user });
     } catch (error) {
         console.error('Error retrieving capsule:', error);
