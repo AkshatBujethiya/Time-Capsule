@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
     avatar: { type: String }, // URL to the user's profile picture
     capsules: [capsuleSchema], // Array of capsules
     friends: [friendSchema], // Array of friends
-    sharedCapsules: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Capsule' }], // Array of shared capsules
+    sharedCapsules: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Capsule' }], // Array of shared capsule IDs
     createdAt: { type: Date, default: Date.now }
 });
 

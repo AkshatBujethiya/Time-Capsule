@@ -50,7 +50,17 @@ capsuleRouter.get('/capsule/:capsuleId', isLoggedIn, async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
     
-        const capsule = user.capsules.id(capsuleId);
+        // Check if the capsule exists in the user's own capsules
+        let capsule = user.capsules.id(capsuleId);
+    
+        // If not found, check in the shared capsules
+        if (!capsule) {
+            const sharedUser = await User.findOne({ sharedCapsules: capsuleId });
+            if (sharedUser) {
+                capsule = sharedUser.capsules.id(capsuleId);
+            }
+        }
+    
         if (!capsule) {
             return res.status(404).json({ message: 'Capsule not found' });
         }
