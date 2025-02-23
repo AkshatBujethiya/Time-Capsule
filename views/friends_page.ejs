@@ -5,57 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Friends Page</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .glass {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-    </style>
 </head>
-<body class="bg-gradient-to-br from-pink-500 to-purple-700 text-white min-h-screen flex">
+<body class="bg-gray-200 text-white min-h-screen flex flex-col items-center justify-center px-4">
 
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-lg h-full p-6 glass min-h-screen">
-        <div class="text-xl font-bold text-blue-900 flex items-center space-x-2">
-            <img src="/images/background1.png" alt="Virtual Time Capsule" class="w-6 h-6 object-contain">
-            <span>Time Capsule</span>
-        </div>
-        <nav class="mt-6 space-y-4">
-            <a href="/dashboard" class="flex items-center space-x-2 text-black font-semibold p-3 rounded-lg bg-gray-300 hover:bg-blue-300 space-x-2 transform transition-all hover:scale-110">
-                <span>🏠</span>
-                <span>Home</span>
-            </a>
-            <a href="/myaccount" class="flex items-center space-x-2 text-gray-600 p-3 rounded-lg hover:bg-blue-300 space-x-2 transform transition-all hover:scale-110">
-                <span>👤</span>
-                <span>Account</span>
-            </a>
-            <a href="/capsules" class="flex items-center space-x-2 text-gray-600 p-3 rounded-lg hover:bg-blue-300 space-x-2 transform transition-all hover:scale-110">
-                <span>💼</span>
-                <span>My Capsules</span>
-            </a>
-            <a href="/sharedcapsule" class="flex items-center space-x-2 text-gray-600 p-3 rounded-lg hover:bg-blue-300 space-x-2 transform transition-all hover:scale-110">
-                <span>📤</span>
-                <span>Shared Capsules</span>
-            </a>
-            <a href="/friends" class="flex items-center space-x-2 text-gray-600 p-3 rounded-lg hover:bg-blue-300 space-x-2 transform transition-all hover:scale-110">
-                <span>👥</span>
-                <span>Friends</span>
-            </a>
-            <a href="/logout" class="flex items-center space-x-2 text-gray-600 p-3 rounded-lg hover:bg-red-300 space-x-2 transform transition-all hover:scale-110">
-                <span>🚪</span>
-                <span>Logout</span>
-            </a>
-        </nav>
-    </aside>
+    <!-- Logo -->
+    <a href="/dashboard" class="mb-6">
+        <img src="/images/background1.png" alt="Virtual Time Capsule" class="w-10 h-10 transition-transform duration-300 hover:scale-110 hover:rotate-6">
+    </a>
 
-    <!-- Main Content -->
-    <main class="flex-1 flex flex-col items-center justify-center px-2">
-        <!-- Logo -->
-        <a href="/dashboard" class="mb-4">
-            <img src="/images/background1.png" alt="Virtual Time Capsule" class="w-10 h-10 transition-transform duration-300 hover:scale-110 hover:rotate-6">
-        </a>
+    <!-- Main Container -->
+    <div class="bg-gradient-to-br from-pink-300 to-purple-500 w-full max-w-lg rounded-xl shadow-lg p-6 flex flex-col items-center">
 
         <!-- Heading -->
         <h1 class="text-3xl font-bold text-center mb-6 text-black">Your Friends (<%= username %>)</h1>
@@ -116,6 +75,8 @@
                 <% } %>
             </ul>
         </div>
-    </main>
+
+    </div>
+
 </body>
 </html>

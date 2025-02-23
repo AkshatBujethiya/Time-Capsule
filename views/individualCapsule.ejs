@@ -65,17 +65,13 @@
         <!-- Files Section -->
         <h2 class="text-2xl font-semibold text-gray-900 mb-4">Attached Files</h2>
         <ul class="space-y-2 text-left">
-            <% if (capsule.files && capsule.files.length > 0) { %>
-                <% capsule.files.forEach(function(file) { %>
-                    <li class="bg-gray-100 rounded-lg p-3 hover:bg-gray-200 transition">
-                        <a href="<%= file.fileUrl %>" target="_blank" class="text-blue-500 font-medium hover:underline">
-                            📎 <%= file.fileName %>
-                        </a>
-                    </li>
-                <% }); %>
-            <% } else { %>
-                <li class="text-gray-500">No files attached.</li>
-            <% } %>
+            <% capsule.files.forEach(function(file) { %>
+                <li class="bg-gray-100 rounded-lg p-3 hover:bg-gray-200 transition">
+                    <a href="<%= file.fileUrl %>" target="_blank" class="text-blue-500 font-medium hover:underline">
+                        📎 <%= file.fileName %>
+                    </a>
+                </li>
+            <% }); %>
         </ul>
 
         <!-- Dates Section -->
@@ -83,21 +79,6 @@
             <p class="mb-2"><strong>📅 Unlock Date:</strong> <%= new Date(capsule.unlockDate).toLocaleString() %></p>
             <p><strong>🕰️ Created At:</strong> <%= new Date(capsule.createdAt).toLocaleString() %></p>
         </div>
-
-        <!-- Countdown Timer -->
-        <p class="text-red-500 font-bold mt-4" id="countdown-timer">Loading...</p>
-        <script>
-            startCountdown('<%= capsule.unlockDate %>', '<%= capsule.lockDate %>', 'countdown-timer');
-        </script>
-        <%= console.log(email) %>
-        <!-- Edit Button -->
-        <% if (!email) { %>
-            <a href="/capsule/<%= capsule._id %>/edit" class="bg-blue-600 text-white px-6 py-3 rounded-lg mt-6 hover:bg-blue-700 transition w-full inline-block">Edit Capsule</a>
-        <% } else if (capsule.isCommunal) { %>
-            <a href="/capsule/<%= email %>/<%= capsule._id %>/edit" class="bg-blue-600 text-white px-6 py-3 rounded-lg mt-6 hover:bg-blue-700 transition w-full inline-block">Edit Capsule</a>
-        <% } else { %>
-            <a href="/capsule/<%= email %>/<%= capsule._id %>/edit" class="bg-blue-600 text-white px-6 py-3 rounded-lg mt-6 hover:bg-blue-700 transition w-full inline-block">Edit Capsule</a>
-        <% } %>
     </div>
 
 </body>
