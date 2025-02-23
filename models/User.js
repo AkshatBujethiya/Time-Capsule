@@ -42,6 +42,5 @@ const userSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model('User', userSchema);
-const Capsule = mongoose.model("Capsule", capsuleSchema);
 
-module.exports = { User, Capsule };
+module.exports = { User };

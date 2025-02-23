@@ -103,6 +103,17 @@
                     <input name="unlockDate" type="datetime-local" class="mt-2 p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600" required>
                 </div>
                 <div class="mt-4">
+                    <label for="lockOption" class="block text-gray-700">Lock Option</label>
+                    <select name="lockOption" id="lockOption" class="mt-2 p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+                        <option value="immediate">Lock Immediately</option>
+                        <option value="specified">Lock at Specified Date</option>
+                    </select>
+                </div>
+                <div class="mt-4" id="lockDateContainer" style="display: none;">
+                    <label for="lockDate" class="block text-gray-700">Lock Date & Time</label>
+                    <input name="lockDate" type="datetime-local" class="mt-2 p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600">
+                </div>
+                <div class="mt-4">
                     <label for="visibility" class="block text-gray-700">Visibility</label>
                     <select name="visibility" id="visibility" class="mt-2 p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600" required>
                         <option value="private">Private</option>
@@ -136,6 +147,8 @@
         const friendEmailsContainer = document.getElementById("friendEmailsContainer");
         const friendEmailsInput = document.getElementById("friendEmailsInput");
         const emailTags = document.getElementById("emailTags");
+        const lockOption = document.getElementById('lockOption');
+        const lockDateContainer = document.getElementById('lockDateContainer');
 
         openModal.addEventListener("click", function() {
             modal.classList.remove("hidden");
@@ -170,6 +183,15 @@
             }
         });
 
+        // Show/hide lock date input based on lock option selection
+        lockOption.addEventListener("change", function() {
+            if (this.value === "specified") {
+                lockDateContainer.style.display = "block";
+            } else {
+                lockDateContainer.style.display = "none";
+            }
+        });
+
         // Add email tag
         friendEmailsInput.addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
@@ -197,6 +219,7 @@
             tag.appendChild(removeTag);
             emailTags.appendChild(tag);
         }
+
         // Add email tags to form before submission
         document.getElementById("capsuleForm").addEventListener("submit", function(event) {
             const emails = [];

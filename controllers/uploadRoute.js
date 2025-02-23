@@ -46,6 +46,7 @@ UploadRouter.post('/upload', isLoggedIn, upload.array('files', 10), async (req, 
             capsuleDescription: req.body.capsuleDescription,
             files: uploadedFiles,
             unlockDate: new Date(req.body.unlockDate),
+            lockDate: req.body.lockDate ? new Date(req.body.lockDate) : null, // Add lock date
             visibility: req.body.visibility, // Store visibility attribute
             isCommunal: req.body.visibility === 'public', // Set isCommunal based on visibility
             createdAt: new Date(),
@@ -71,7 +72,8 @@ UploadRouter.post('/upload', isLoggedIn, upload.array('files', 10), async (req, 
                         capsuleId: savedCapsule._id,
                         capsuleName: savedCapsule.capsuleName, // Add capsule name
                         sharedBy: userEmail,
-                        unlockDate: savedCapsule.unlockDate // Add unlock date
+                        unlockDate: savedCapsule.unlockDate, // Add unlock date
+                        lockDate: savedCapsule.lockDate // Add lock date
                     });
                     await friend.save();
                     savedCapsule.sharedWith.push(email); // Add the friend's email to the sharedWith array

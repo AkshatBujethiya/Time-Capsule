@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { createCapsule } = require('../configs/capsuleController');
 const { isLoggedIn } = require('../configs/auth');
-const {User} = require('../models/User');
+const { User } = require('../models/User');
 const upload = require('../configs/multer');
 
 const capsuleRouter = Router();
@@ -16,10 +16,10 @@ capsuleRouter.get('/capsules', isLoggedIn, async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
     
-        // Separate capsules into unlocked and locked based on the unlock date
+        // Separate capsules into unlocked and locked based on the unlock date and lock date
         const currentDate = new Date();
-        const unlockedCapsules = user.capsules.filter(capsule => capsule.unlockDate <= currentDate);
-        const lockedCapsules = user.capsules.filter(capsule => capsule.unlockDate > currentDate);
+        const unlockedCapsules = user.capsules.filter(capsule => capsule.unlockDate <= currentDate && (!capsule.lockDate || capsule.lockDate <= currentDate));
+        const lockedCapsules = user.capsules.filter(capsule => capsule.unlockDate > currentDate || (capsule.lockDate && capsule.lockDate > currentDate));
         
         res.render('myCapsules', { unlockedCapsules, lockedCapsules, user, username: req.user.name });
     } catch (error) {
@@ -37,7 +37,6 @@ capsuleRouter.post('/capsules/create', isLoggedIn, async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
-
 
 capsuleRouter.get('/capsule/:capsuleId', isLoggedIn, async (req, res) => {
     try {
