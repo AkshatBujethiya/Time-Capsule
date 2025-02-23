@@ -45,9 +45,10 @@ UploadRouter.post('/upload', isLoggedIn, upload.array('files', 10), async (req, 
             capsuleDescription: req.body.capsuleDescription,
             files: uploadedFiles,
             unlockDate: new Date(req.body.unlockDate),
+            isCommunal: req.body.visibility === 'public', // Set isCommunal based on visibility
             createdAt: new Date()
         };
-
+        console.log(capsule);
         // Add the capsule to the user's capsules array
         user.capsules.push(capsule);
         await user.save();
