@@ -123,5 +123,28 @@ capsuleRouter.get('/sharedcapsule', isLoggedIn, async (req, res) => {
     }
 });
 
+capsuleRouter.get('/capsule/:email/:capsuleId', isLoggedIn, async (req, res) => {
+    try {
+        const { email, capsuleId } = req.params;
+
+        // Find the user by email and populate their capsules
+        const user = await User.findOne({ email }).populate('capsules');
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Find the capsule by ID within the user's capsules
+        const capsule = user.capsules.id(capsuleId);
+        if (!capsule) {
+            return res.status(404).json({ message: 'Capsule not found' });
+        }
+
+        res.render('individualCapsule', { capsule, username: req.user.name });
+    } catch (error) {
+        console.error('Error retrieving capsule:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 module.exports = capsuleRouter;
 

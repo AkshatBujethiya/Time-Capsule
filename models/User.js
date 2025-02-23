@@ -23,6 +23,12 @@ const friendSchema = new mongoose.Schema({
     email: { type: String, required: true }
 });
 
+const sharedCapsuleSchema = new mongoose.Schema({
+    capsuleId: { type: mongoose.Schema.Types.ObjectId, ref: 'Capsule', required: true },
+    capsuleName: { type: String, required: true },
+    sharedBy: { type: String, required: true }
+});
+
 const userSchema = new mongoose.Schema({
     googleId: { type: String, required: true, unique: true },
     name: { type: String, required: true },
@@ -30,7 +36,7 @@ const userSchema = new mongoose.Schema({
     avatar: { type: String }, // URL to the user's profile picture
     capsules: [capsuleSchema], // Array of capsules
     friends: [friendSchema], // Array of friends
-    sharedCapsules: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Capsule' }], // Array of shared capsule IDs
+    sharedCapsules: [sharedCapsuleSchema], // Array of shared capsule objects
     createdAt: { type: Date, default: Date.now }
 });
 

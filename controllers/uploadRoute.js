@@ -30,8 +30,9 @@ UploadRouter.post('/upload', isLoggedIn, upload.array('files', 10), async (req, 
 
         const uploadedFiles = await Promise.all(uploadPromises);
 
-        // Get the authenticated user's ID
+        // Get the authenticated user's ID and email
         const userId = req.user._id;
+        const userEmail = req.user.email;
 
         // Find the user and add the file URLs to their profile
         const user = await User.findById(userId);
@@ -66,7 +67,11 @@ UploadRouter.post('/upload', isLoggedIn, upload.array('files', 10), async (req, 
                 const friend = await User.findOne({ email });
                 console.log(savedCapsule._id);
                 if (friend) {
-                    friend.sharedCapsules.push(savedCapsule._id);
+                    friend.sharedCapsules.push({
+                        capsuleId: savedCapsule._id,
+                        capsuleName: savedCapsule.capsuleName, // Add capsule name
+                        sharedBy: userEmail
+                    });
                     await friend.save();
                     savedCapsule.sharedWith.push(email); // Add the friend's email to the sharedWith array
                 }
