@@ -5,39 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shared Capsules</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f5f5f5;
-        }
-        h1, h2 {
-            font-family: 'Playfair Display', serif;
-        }
-        .capsule-card {
-            background: linear-gradient(145deg, #ffffff, #f0f0f0);
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .capsule-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
-        }
-        .countdown {
-            font-family: 'Playfair Display', serif;
-            color: #6b46c1;
-            font-weight: bold;
-        }
-        .unlocked {
-            color: #10b981;
-        }
-        .vintage-bg {
-            background-image: url('https://www.transparenttextures.com/patterns/old-map.png');
-            background-repeat: repeat;
-        }
-    </style>
     <script>
         function startCountdown(unlockDate, elementId) {
             const countDownDate = new Date(unlockDate).getTime();
@@ -49,7 +16,7 @@
 
                 if (isNaN(distance) || distance < 0) {
                     clearInterval(updateCountdown);
-                    countdownElement.innerHTML = "<span class='unlocked'>Unlocked!</span>";
+                    countdownElement.innerHTML = "Unlocked";
                     return;
                 }
 
@@ -58,56 +25,41 @@
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                countdownElement.innerHTML = `<span class="countdown">${days}d ${hours}h ${minutes}m ${seconds}s</span>`;
+                countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
             }, 1000);
         }
     </script>
 </head>
-<body class="vintage-bg">
-    <div class="container mx-auto p-6">
-        <!-- Header -->
-        <header class="text-center mb-12">
-            <h1 class="text-5xl font-bold text-gray-800 mb-4">Time Capsule Vault</h1>
-            <p class="text-xl text-gray-600">Preserve your memories and share them with the future.</p>
-        </header>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl font-bold text-center mb-8">Shared Capsules</h1>
+        
+        <h2 class="text-3xl font-semibold mb-4">Shared Capsules</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
+            <% sharedCapsules.forEach(function(capsule, index) { %>
+                <div class="bg-white rounded-lg shadow-md p-6 cursor-pointer transform transition duration-300 hover:scale-105" onclick="location.href='/capsule/<%= capsule.sharedBy %>/<%= capsule.capsuleId %>'">
+                    <h2 class="text-2xl font-semibold mb-2"><%= capsule.capsuleName %></h2>
+                    <p class="text-gray-600 mb-2">Shared by: <%= capsule.sharedBy %></p>
+                    <p class="text-gray-600" id="countdown-shared-<%= index %>">Loading...</p>
+                    <script>
+                        startCountdown('<%= capsule.unlockDate %>', 'countdown-shared-<%= index %>');
+                    </script>
+                </div>
+            <% }); %>
+        </div>
 
-        <!-- Shared Capsules Section -->
-        <section class="mb-12">
-            <h2 class="text-3xl font-bold text-gray-800 mb-6">Shared Capsules</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                <% sharedCapsules.forEach(function(capsule, index) { %>
-                    <div class="capsule-card p-6 cursor-pointer" onclick="location.href='/capsule/<%= capsule.sharedBy %>/<%= capsule.capsuleId %>'">
-                        <h2 class="text-2xl font-semibold text-gray-800 mb-2"><%= capsule.capsuleName %></h2>
-                        <p class="text-gray-600 mb-2">Shared by: <span class="font-medium"><%= capsule.sharedBy %></span></p>
-                        <p class="text-gray-600" id="countdown-shared-<%= index %>">Loading...</p>
-                        <script>
-                            startCountdown('<%= capsule.unlockDate %>', 'countdown-shared-<%= index %>');
-                        </script>
-                    </div>
-                <% }); %>
-            </div>
-        </section>
-
-        <!-- Communal Capsules Section -->
-        <section>
-            <h2 class="text-3xl font-bold text-gray-800 mb-6">Communal Capsules</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                <% communalCapsules.forEach(function(capsule, index) { %>
-                    <div class="capsule-card p-6 cursor-pointer" onclick="location.href='/capsule/<%= capsule.id %>'">
-                        <h2 class="text-2xl font-semibold text-gray-800 mb-2"><%= capsule.capsuleName %></h2>
-                        <p class="text-gray-600" id="countdown-communal-<%= index %>">Loading...</p>
-                        <script>
-                            startCountdown('<%= capsule.unlockDate %>', 'countdown-communal-<%= index %>');
-                        </script>
-                    </div>
-                <% }); %>
-            </div>
-        </section>
+        <h2 class="text-3xl font-semibold mb-4">Communal Capsules</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <% communalCapsules.forEach(function(capsule, index) { %>
+                <div class="bg-white rounded-lg shadow-md p-6 cursor-pointer transform transition duration-300 hover:scale-105" onclick="location.href='/capsule/<%= capsule.id %>'">
+                    <h2 class="text-2xl font-semibold mb-2"><%= capsule.capsuleName %></h2>
+                    <p class="text-gray-600" id="countdown-communal-<%= index %>">Loading...</p>
+                    <script>
+                        startCountdown('<%= capsule.unlockDate %>', 'countdown-communal-<%= index %>');
+                    </script>
+                </div>
+            <% }); %>
+        </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="text-center py-6 mt-12 bg-gray-800 text-white">
-        <p class="text-sm">© 2023 Time Capsule Vault. All rights reserved.</p>
-    </footer>
 </body>
 </html>
