@@ -44,26 +44,23 @@ capsuleRouter.post('/capsules/create', isLoggedIn, async (req, res) => {
 
 capsuleRouter.get('/capsule/:capsuleId', isLoggedIn, async (req, res) => {
     try {
-        const userId = req.user._id; // Get the authenticated user's ID
         const { capsuleId } = req.params;
-    
-        // Find the user and their capsule
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-    
-        // Check if the capsule exists in the user's own capsules
-        let capsule = user.capsules.id(capsuleId);
-    
-        // If not found, check in the shared capsules
+
+        // Find the capsule by ID within the user's capsules or communal capsules
+        let user = await User.findOne({ 'capsules._id': capsuleId }, { 'capsules.$': 1, email: 1 });
+        let capsule = user ? user.capsules[0] : null;
+        let email = user ? user.email : null;
+
         if (!capsule) {
-            const sharedUser = await User.findOne({ sharedCapsules: capsuleId });
-            if (sharedUser) {
-                capsule = sharedUser.capsules.id(capsuleId);
-            }
+            const communalCapsule = await User.aggregate([
+                { $unwind: "$capsules" },
+                { $match: { "capsules._id": new ObjectId(capsuleId), "capsules.isCommunal": true } },
+                { $replaceRoot: { newRoot: "$capsules" } }
+            ]);
+            capsule = communalCapsule[0];
+            email = communalCapsule.length > 0 ? communalCapsule[0].ownerEmail : null;
         }
-    
+
         if (!capsule) {
             return res.status(404).json({ message: 'Capsule not found' });
         }
@@ -73,8 +70,8 @@ capsuleRouter.get('/capsule/:capsuleId', isLoggedIn, async (req, res) => {
         if (capsule.unlockDate > currentDate) {
             return res.redirect('/capsules');
         }
-    
-        res.render('individualCapsule', { capsule: capsule, username: req.user.name });
+
+        res.render('individualCapsule', { capsule, email, user: req.user });
     } catch (error) {
         console.error('Error retrieving capsule:', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -178,7 +175,7 @@ capsuleRouter.post('/capsule/:capsuleId/edit', isLoggedIn, upload.array('files',
             return res.redirect('/capsules');
         }
     
-        res.redirect(`/capsule/${capsuleId}`);
+        res.redirect("/sharedcapsule");
     } catch (error) {
         console.error('Error updating capsule:', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -251,8 +248,8 @@ capsuleRouter.get('/capsule/:email/:capsuleId', isLoggedIn, async (req, res) => 
         if (!capsule) {
             return res.status(404).json({ message: 'Capsule not found' });
         }
-
-        res.render('individualCapsule', { capsule, username: req.user.name });
+        console.log(capsule);
+        res.render('individualCapsule', { capsule, email, user: req.user });
     } catch (error) {
         console.error('Error retrieving capsule:', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -270,12 +267,12 @@ capsuleRouter.get('/capsule/:email/:capsuleId/edit', isLoggedIn, async (req, res
         }
 
         // Find the capsule by ID within the user's capsules
-        const capsule = user.capsules.id(ObjectId(capsuleId));
+        const capsule = user.capsules.id(new ObjectId(capsuleId));
         if (!capsule) {
             return res.status(404).json({ message: 'Capsule not found' });
         }
 
-        res.render('editCapsule', { capsule });
+        res.render('editCapsule', { capsule, email, user:req.user });
     } catch (error) {
         console.error('Error retrieving capsule:', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -294,7 +291,7 @@ capsuleRouter.post('/capsule/:email/:capsuleId/edit', isLoggedIn, upload.array('
         }
 
         // Find the capsule by ID within the user's capsules
-        const capsule = user.capsules.id(ObjectId(capsuleId));
+        const capsule = user.capsules.id(new ObjectId(capsuleId));
         if (!capsule) {
             return res.status(404).json({ message: 'Capsule not found' });
         }
