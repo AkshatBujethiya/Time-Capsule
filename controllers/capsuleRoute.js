@@ -47,16 +47,18 @@ capsuleRouter.get('/capsule/:capsuleId', isLoggedIn, async (req, res) => {
         const { capsuleId } = req.params;
 
         // Find the capsule by ID within the user's capsules or communal capsules
-        let user = await User.findOne({ 'capsules._id': capsuleId }, { 'capsules.$': 1 });
+        let user = await User.findOne({ 'capsules._id': capsuleId }, { 'capsules.$': 1, email: 1 });
         let capsule = user ? user.capsules[0] : null;
+        let email = user ? user.email : null;
 
         if (!capsule) {
             const communalCapsule = await User.aggregate([
                 { $unwind: "$capsules" },
-                { $match: { "capsules._id": ObjectId(capsuleId), "capsules.isCommunal": true } },
+                { $match: { "capsules._id": new ObjectId(capsuleId), "capsules.isCommunal": true } },
                 { $replaceRoot: { newRoot: "$capsules" } }
             ]);
             capsule = communalCapsule[0];
+            email = communalCapsule.length > 0 ? communalCapsule[0].ownerEmail : null;
         }
 
         if (!capsule) {
@@ -68,8 +70,8 @@ capsuleRouter.get('/capsule/:capsuleId', isLoggedIn, async (req, res) => {
         if (capsule.unlockDate > currentDate) {
             return res.redirect('/capsules');
         }
-        console.log(capsule);
-        res.render('individualCapsule', { capsule,email, user: req.user });
+
+        res.render('individualCapsule', { capsule, email, user: req.user });
     } catch (error) {
         console.error('Error retrieving capsule:', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -173,7 +175,7 @@ capsuleRouter.post('/capsule/:capsuleId/edit', isLoggedIn, upload.array('files',
             return res.redirect('/capsules');
         }
     
-        res.redirect(`/capsule/${capsuleId}`);
+        res.redirect("/sharedcapsule");
     } catch (error) {
         console.error('Error updating capsule:', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -247,7 +249,7 @@ capsuleRouter.get('/capsule/:email/:capsuleId', isLoggedIn, async (req, res) => 
             return res.status(404).json({ message: 'Capsule not found' });
         }
         console.log(capsule);
-        res.render('individualCapsule', { capsule,email, user: req.user });
+        res.render('individualCapsule', { capsule, email, user: req.user });
     } catch (error) {
         console.error('Error retrieving capsule:', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -265,12 +267,12 @@ capsuleRouter.get('/capsule/:email/:capsuleId/edit', isLoggedIn, async (req, res
         }
 
         // Find the capsule by ID within the user's capsules
-        const capsule = user.capsules.id(ObjectId(capsuleId));
+        const capsule = user.capsules.id(new ObjectId(capsuleId));
         if (!capsule) {
             return res.status(404).json({ message: 'Capsule not found' });
         }
 
-        res.render('editCapsule', { capsule });
+        res.render('editCapsule', { capsule, email, user:req.user });
     } catch (error) {
         console.error('Error retrieving capsule:', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -289,7 +291,7 @@ capsuleRouter.post('/capsule/:email/:capsuleId/edit', isLoggedIn, upload.array('
         }
 
         // Find the capsule by ID within the user's capsules
-        const capsule = user.capsules.id(ObjectId(capsuleId));
+        const capsule = user.capsules.id(new ObjectId(capsuleId));
         if (!capsule) {
             return res.status(404).json({ message: 'Capsule not found' });
         }
