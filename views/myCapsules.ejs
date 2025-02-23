@@ -6,13 +6,20 @@
     <title>My Capsules</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        function startCountdown(unlockDate, elementId) {
+        function startCountdown(unlockDate, lockDate, elementId) {
             const countDownDate = new Date(unlockDate).getTime();
+            const lockDateTime = new Date(lockDate).getTime();
             const countdownElement = document.getElementById(elementId);
 
             const updateCountdown = setInterval(function() {
                 const now = new Date().getTime();
                 const distance = countDownDate - now;
+                const lockDistance = lockDateTime - now;
+
+                if (lockDistance > 0) {
+                    countdownElement.innerHTML = "Open until " + new Date(lockDate).toLocaleString();
+                    return;
+                }
 
                 if (distance < 0) {
                     clearInterval(updateCountdown);
@@ -51,7 +58,7 @@
                         <p class="text-red-500 font-bold" id="countdown-locked-<%= index %>">Loading...</p>
                         <p class="text-gray-500 text-sm">Created on: <%= new Date(capsule.createdAt).toLocaleString() %></p>
                         <script>
-                            startCountdown('<%= capsule.unlockDate %>', 'countdown-locked-<%= index %>');
+                            startCountdown('<%= capsule.unlockDate %>', '<%= capsule.lockDate %>', 'countdown-locked-<%= index %>');
                         </script>
                     </div>
                 <% }); %>
@@ -68,6 +75,17 @@
                         <h2 class="text-1xl font-semibold mb-2"><%= capsule.capsuleName %></h2>
                         <p class="text-green-500 font-bold">Unlocked</p>
                         <p class="text-gray-500 text-sm">Created on: <%= new Date(capsule.createdAt).toLocaleString() %></p>
+                    </div>
+                <% }); %>
+                <% openCapsules.forEach(function(capsule, index) { %>
+                    <div class="bg-white rounded-lg shadow-md p-4 transition transform hover:scale-105 cursor-pointer"
+                         onclick="location.href='/capsule/<%= capsule.id %>'">
+                        <h2 class="text-1xl font-semibold mb-2"><%= capsule.capsuleName %></h2>
+                        <p class="text-red-500 font-bold" id="countdown-open-<%= index %>">Loading...</p>
+                        <p class="text-gray-500 text-sm">Created on: <%= new Date(capsule.createdAt).toLocaleString() %></p>
+                        <script>
+                            startCountdown('<%= capsule.unlockDate %>', '<%= capsule.lockDate %>', 'countdown-open-<%= index %>');
+                        </script>
                     </div>
                 <% }); %>
             </div>

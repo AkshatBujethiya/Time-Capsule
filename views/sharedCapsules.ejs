@@ -17,7 +17,7 @@
                 const lockDistance = lockDateTime - now;
 
                 if (lockDistance > 0) {
-                    countdownElement.innerHTML = "Locked until " + new Date(lockDate).toLocaleString();
+                    countdownElement.innerHTML = "Unlocked until " + new Date(lockDate).toLocaleString();
                     return;
                 }
 
