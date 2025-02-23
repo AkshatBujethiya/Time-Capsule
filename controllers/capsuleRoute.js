@@ -20,12 +20,7 @@ capsuleRouter.get('/capsules', isLoggedIn, async (req, res) => {
         const unlockedCapsules = user.capsules.filter(capsule => capsule.unlockDate <= currentDate);
         const lockedCapsules = user.capsules.filter(capsule => capsule.unlockDate > currentDate);
         
-<<<<<<< HEAD
         res.render('myCapsules', { unlockedCapsules, lockedCapsules, user, username: req.user.name });
-=======
-        console.log(unlockedCapsules, lockedCapsules);
-        res.render('myCapsules', { unlockedCapsules, lockedCapsules, user,username: req.user.name });
->>>>>>> parent of 6488654 (some changes)
     } catch (error) {
         console.error('Error retrieving capsules:', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -34,40 +29,7 @@ capsuleRouter.get('/capsules', isLoggedIn, async (req, res) => {
 
 capsuleRouter.post('/capsules/create', isLoggedIn, async (req, res) => {
     try {
-<<<<<<< HEAD
-        const { capsuleName, capsuleDescription, unlockDate, lockOption, lockDate } = req.body;
-        const userId = req.user._id; // Get the authenticated user's ID
-
-        // Validate the unlock date
-        if (new Date(unlockDate) <= new Date()) {
-            return res.status(400).json({ message: 'Unlock date must be in the future' });
-        }
-
-        // Find the user and add the new capsule
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        const capsule = {
-            capsuleName : capsuleName,
-            capsuleDescription,
-            unlockDate: new Date(unlockDate),
-            createdAt: new Date(),
-            isCommunal: false,
-            files: []
-        };
-        console.log(capsule);
-        if (lockOption === 'specified' && lockDate) {
-            capsule.lockDate = new Date(lockDate);
-        }
-
-        user.capsules.push(capsule);
-        await user.save();
-
-=======
         await createCapsule(req, res);
->>>>>>> parent of 6488654 (some changes)
         res.redirect('/dashboard'); // Redirect to dashboard after creation
     } catch (error) {
         console.error("Error creating capsule:", error);
