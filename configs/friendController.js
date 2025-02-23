@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const User = require('../models/User');
+const {User} = require('../models/User');
 // Add a friend
 const addFriend = async (req, res) => {
     const { userId, friendId } = req.body;

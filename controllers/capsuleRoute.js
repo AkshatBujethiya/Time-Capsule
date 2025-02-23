@@ -1,7 +1,8 @@
 const { Router } = require('express');
 const { createCapsule } = require('../configs/capsuleController');
 const { isLoggedIn } = require('../configs/auth');
-const User = require('../models/User');
+const {User} = require('../models/User');
+const upload = require('../configs/multer');
 
 const capsuleRouter = Router();
 
@@ -54,7 +55,7 @@ capsuleRouter.get('/capsule/:capsuleId', isLoggedIn, async (req, res) => {
             return res.status(404).json({ message: 'Capsule not found' });
         }
     
-        res.render('individualCapsule',{capsule:capsule,username: req.user.name});
+        res.render('individualCapsule', { capsule: capsule, username: req.user.name });
     } catch (error) {
         console.error('Error retrieving capsule:', error);
         res.status(500).json({ message: 'Internal server error' });

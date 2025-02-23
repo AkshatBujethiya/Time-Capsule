@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const FriendRouter = Router();
-const User = require('../models/User');
+const {User} = require('../models/User');
 const { isLoggedIn } = require('../configs/auth');
 const { addFriend, removeFriend } = require('../configs/friendController');
 
