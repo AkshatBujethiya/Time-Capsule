@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shared Capsules</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         function startCountdown(unlockDate, lockDate, elementId) {
             const countDownDate = new Date(unlockDate).getTime();
@@ -17,13 +17,14 @@
                 const lockDistance = lockDateTime - now;
 
                 if (lockDistance > 0) {
-                    countdownElement.innerHTML = "Locked until " + new Date(lockDate).toLocaleString();
+                    countdownElement.innerHTML = "🔒 Locked until " + new Date(lockDate).toLocaleString();
                     return;
                 }
 
                 if (distance < 0) {
                     clearInterval(updateCountdown);
-                    countdownElement.innerHTML = "Unlocked";
+                    countdownElement.innerHTML = "✅ Unlocked!";
+                    countdownElement.classList.add("text-green-500");
                     return;
                 }
 
@@ -36,36 +37,64 @@
             }, 1000);
         }
     </script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        .glow-hover:hover {
+            box-shadow: 0px 0px 15px rgba(0, 255, 255, 0.8);
+            transform: scale(1.05);
+        }
+        .animated-bg {
+            background: linear-gradient(-45deg, #243a47, #ad3370, #6c3840);
+            background-size: 400% 400%;
+            animation: bgMove 10s ease infinite;
+        }
+    </style>
 </head>
-<body class="bg-gray-100">
-    <div class="container mx-auto p-4">
-        <h1 class="text-4xl font-bold text-center mb-8">Shared Capsules</h1>
-        
-        <h2 class="text-3xl font-semibold mb-4">Shared Capsules</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
-            <% sharedCapsules.forEach(function(capsule, index) { %>
-                <div class="bg-white rounded-lg shadow-md p-6 cursor-pointer transform transition duration-300 hover:scale-105" onclick="location.href='/capsule/<%= capsule.sharedBy %>/<%= capsule.capsuleId %>'">
-                    <h2 class="text-2xl font-semibold mb-2"><%= capsule.capsuleName %></h2>
-                    <p class="text-gray-600 mb-2">Shared by: <%= capsule.sharedBy %></p>
-                    <p class="text-gray-600" id="countdown-shared-<%= index %>">Loading...</p>
-                    <script>
-                        startCountdown('<%= capsule.unlockDate %>', '<%= capsule.lockDate %>', 'countdown-shared-<%= index %>');
-                    </script>
-                </div>
-            <% }); %>
+<body class="animated-bg min-h-screen flex flex-col items-center p-6 fade-in">
+
+    <h1 class="text-5xl font-bold text-white mb-8 text-center">📤 Shared Capsules</h1>
+    
+    <div class="w-full flex flex-col lg:flex-row justify-center gap-8">
+
+        <!-- Shared Capsules Container -->
+        <div class="w-full lg:w-1/2 bg-white bg-opacity-20 backdrop-blur-md shadow-lg rounded-lg p-8 border-1 border-blue-400 fade-in">
+            <h2 class="text-3xl font-semibold text-white mb-4 text-center">🌎 Shared Capsules</h2>
+            <div class="space-y-4">
+                <% sharedCapsules.forEach(function(capsule, index) { %>
+                    <div class="bg-white rounded-lg shadow-md p-4 transition transform glow-hover cursor-pointer"
+                         onclick="location.href='/capsule/<%= capsule.sharedBy %>/<%= capsule.capsuleId %>'">
+                        <h2 class="text-1xl font-semibold mb-2"><%= capsule.capsuleName %></h2>
+                        <p class="text-gray-600">Shared by: <%= capsule.sharedBy %></p>
+                        <p class="text-red-500 font-bold" id="countdown-shared-<%= index %>">Loading...</p>
+                        <script>
+                            startCountdown('<%= capsule.unlockDate %>', '<%= capsule.lockDate %>', 'countdown-shared-<%= index %>');
+                        </script>
+                    </div>
+                <% }); %>
+            </div>
         </div>
 
-        <h2 class="text-3xl font-semibold mb-4">Communal Capsules</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <% communalCapsules.forEach(function(capsule, index) { %>
-                <div class="bg-white rounded-lg shadow-md p-6 cursor-pointer transform transition duration-300 hover:scale-105" onclick="location.href='/capsule/<%= capsule.id %>'">
-                    <h2 class="text-2xl font-semibold mb-2"><%= capsule.capsuleName %></h2>
-                    <p class="text-gray-600" id="countdown-communal-<%= index %>">Loading...</p>
-                    <script>
-                        startCountdown('<%= capsule.unlockDate %>', '<%= capsule.lockDate %>', 'countdown-communal-<%= index %>');
-                    </script>
-                </div>
-            <% }); %>
+        <!-- Communal Capsules Container -->
+        <div class="w-full lg:w-1/2 bg-white bg-opacity-20 backdrop-blur-md shadow-lg rounded-lg p-8 border-1 border-blue-400 fade-in">
+            <h2 class="text-3xl font-semibold text-white mb-4 text-center">🤝 Communal Capsules</h2>
+            <div class="space-y-4">
+                <% communalCapsules.forEach(function(capsule, index) { %>
+                    <div class="bg-white rounded-lg shadow-md p-4 transition transform glow-hover cursor-pointer"
+                         onclick="location.href='/capsule/<%= capsule.id %>'">
+                        <h2 class="text-1xl font-semibold mb-2"><%= capsule.capsuleName %></h2>
+                        <p class="text-red-500 font-bold" id="countdown-communal-<%= index %>">Loading...</p>
+                        <script>
+                            startCountdown('<%= capsule.unlockDate %>', '<%= capsule.lockDate %>', 'countdown-communal-<%= index %>');
+                        </script>
+                    </div>
+                <% }); %>
+            </div>
         </div>
     </div>
 </body>

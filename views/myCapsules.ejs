@@ -16,7 +16,9 @@
 
                 if (distance < 0) {
                     clearInterval(updateCountdown);
-                    countdownElement.innerHTML = "Unlocked";
+                    countdownElement.innerHTML = "✅ Unlocked!";
+                    countdownElement.classList.remove("animate-pulse");
+                    countdownElement.classList.add("text-green-500");
                     return;
                 }
 
@@ -26,47 +28,110 @@
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
                 countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+                if (distance < 60000) {
+                    countdownElement.classList.add("animate-pulse");
+                }
             }, 1000);
         }
     </script>
+    <style>
+        /* Page load fade-in */
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glowing hover effect */
+        .glow-hover {
+            transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        .glow-hover:hover {
+            box-shadow: 0px 0px 15px rgba(0, 255, 255, 0.8);
+            transform: scale(1.05);
+        }
+
+        /* Floating animation */
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .float-animation {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        /* Click animation */
+        .click-effect:active {
+            transform: scale(0.95);
+            filter: brightness(1.2);
+        }
+
+        /* Animated background */
+        @keyframes bgMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .animated-bg {
+            background: linear-gradient(-45deg, #243a47, #ad3370, #6c3840);
+            background-size: 400% 400%;
+            animation: bgMove 10s ease infinite;
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-r from-pink-500 to-purple-700 min-h-screen flex flex-col items-center p-6">
+<body class="animated-bg min-h-screen flex flex-col items-center p-6 fade-in">
 
     <!-- Page Title -->
-    <h1 class="text-5xl font-bold text-black mb-8 text-center"><%= username %> Capsules</h1>
+    <h1 class="text-5xl font-bold text-white mb-8 text-center float-animation"><%= username %> Capsules</h1>
+
     <a href="/dashboard">
-        <img src="/images/background1.png" alt="Virtual Time Capsule" class="top-10 flex items-center absolute left-8 w-8 h-8 object-contain hover:opacity-80 transition">
+        <img src="/images/background1.png" alt="Virtual Time Capsule" class="absolute top-10 left-8 w-8 h-8 object-contain hover:opacity-80 transition">
     </a>
 
     <!-- Containers Wrapper -->
+
     <div class="w-full flex flex-col lg:flex-row justify-center gap-8">
 
-        <!-- Future Capsules Container -->
-        <div class="w-full lg:w-1/2 bg-white bg-opacity-20 backdrop-blur-md shadow-lg rounded-lg p-8 border-1 border-blue-400">
-            <h2 class="text-3xl font-semibold text-white mb-4 text-center">Future Capsules</h2>
-            <div class="space-y-4">
-                <% lockedCapsules.forEach(function(capsule, index) { %>
-                    <div class="bg-white rounded-lg shadow-md p-4 transition transform hover:scale-105 cursor-pointer">
-                        <h2 class="text-1xl font-semibold mb-2"><%= capsule.capsuleName %></h2>
-                        <p class="text-red-500 font-bold" id="countdown-locked-<%= index %>">Loading...</p>
-                        <p class="text-gray-500 text-sm">Created on: <%= new Date(capsule.createdAt).toLocaleString() %></p>
-                        <script>
-                            startCountdown('<%= capsule.unlockDate %>', 'countdown-locked-<%= index %>');
-                        </script>
-                    </div>
-                <% }); %>
-            </div>
-        </div>
+<!-- Future Capsules Container -->
+<div class="w-full lg:w-1/2 bg-white bg-opacity-20 backdrop-blur-md shadow-lg rounded-lg p-8 border-1 border-blue-400 fade-in">
+    <h2 class="text-3xl font-semibold text-white mb-4 text-center">🚀 Future Capsules</h2>
+    <div class="space-y-4">
+        <% if (lockedCapsules.length > 0) { %>
+            <% lockedCapsules.forEach(function(capsule, index) { %>
+                <div class="bg-white rounded-lg shadow-md p-4 transition transform glow-hover cursor-pointer">
+                    <h2 class="text-1xl font-semibold mb-2"><%= capsule.capsuleName %></h2>
+                    <p class="text-red-500 font-bold" id="countdown-locked-<%= index %>">Loading...</p>
+                    <p class="text-gray-500 text-sm">Created on: <%= new Date(capsule.createdAt).toLocaleString() %></p>
+                    <script>
+                        startCountdown('<%= capsule.unlockDate %>', 'countdown-locked-<%= index %>');
+                    </script>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p class="text-center text-gray-300 text-lg italic">No Mystery, Create One ✨</p>
+            
+        <% } %>
+    </div>
+</div>
+
 
         <!-- Opened Capsules Container -->
-        <div class="w-full lg:w-1/2 bg-white bg-opacity-20 backdrop-blur-md shadow-lg rounded-lg p-8 border-1 border-blue-400">
-            <h2 class="text-3xl font-semibold text-white mb-4 text-center">Opened Capsules</h2>
+        <div class="w-full lg:w-1/2 bg-white bg-opacity-20 backdrop-blur-md shadow-lg rounded-lg p-8 border-1 border-blue-400 fade-in">
+            <h2 class="text-3xl font-semibold text-white mb-4 text-center">🛸 Opened Capsules</h2>
             <div class="space-y-4">
                 <% unlockedCapsules.forEach(function(capsule) { %>
-                    <div class="bg-white rounded-lg shadow-md p-4 transition transform hover:scale-105 cursor-pointer"
+                    <div class="bg-white rounded-lg shadow-md p-4 transition transform glow-hover cursor-pointer click-effect"
                          onclick="location.href='/capsule/<%= capsule.id %>'">
                         <h2 class="text-1xl font-semibold mb-2"><%= capsule.capsuleName %></h2>
-                        <p class="text-green-500 font-bold">Unlocked</p>
+                        <p class="text-green-500 font-bold">✅ Unlocked</p>
                         <p class="text-gray-500 text-sm">Created on: <%= new Date(capsule.createdAt).toLocaleString() %></p>
                     </div>
                 <% }); %>
