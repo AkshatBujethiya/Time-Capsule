@@ -68,8 +68,8 @@ capsuleRouter.get('/capsule/:capsuleId', isLoggedIn, async (req, res) => {
         if (capsule.unlockDate > currentDate) {
             return res.redirect('/capsules');
         }
-
-        res.render('individualCapsule', { capsule, username: req.user.name });
+        console.log(capsule);
+        res.render('individualCapsule', { capsule,email, user: req.user });
     } catch (error) {
         console.error('Error retrieving capsule:', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -246,8 +246,8 @@ capsuleRouter.get('/capsule/:email/:capsuleId', isLoggedIn, async (req, res) => 
         if (!capsule) {
             return res.status(404).json({ message: 'Capsule not found' });
         }
-
-        res.render('individualCapsule', { capsule, username: req.user.name });
+        console.log(capsule);
+        res.render('individualCapsule', { capsule,email, user: req.user });
     } catch (error) {
         console.error('Error retrieving capsule:', error);
         res.status(500).json({ message: 'Internal server error' });

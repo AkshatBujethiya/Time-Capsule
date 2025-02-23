@@ -92,7 +92,13 @@
         </script>
 
         <!-- Edit Button -->
-        <a href="/capsule/<%= capsule._id %>/edit" class="bg-blue-600 text-white px-6 py-3 rounded-lg mt-6 hover:bg-blue-700 transition w-full inline-block">Edit Capsule</a>
+        <% if (capsule.creatorEmail === user.email) { %>
+            <a href="/capsule/<%= capsule._id %>/edit" class="bg-blue-600 text-white px-6 py-3 rounded-lg mt-6 hover:bg-blue-700 transition w-full inline-block">Edit Capsule</a>
+        <% } else if (capsule.isCommunal) { %>
+            <a href="/capsule/<%= email %>/<%= capsule._id %>/edit" class="bg-blue-600 text-white px-6 py-3 rounded-lg mt-6 hover:bg-blue-700 transition w-full inline-block">Edit Capsule</a>
+        <% } else { %>
+            <a href="/capsule/<%= email %>/<%= capsule._id %>/edit" class="bg-blue-600 text-white px-6 py-3 rounded-lg mt-6 hover:bg-blue-700 transition w-full inline-block">Edit Capsule</a>
+        <% } %>
     </div>
 
 </body>
