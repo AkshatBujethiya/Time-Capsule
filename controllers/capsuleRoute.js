@@ -20,19 +20,21 @@ capsuleRouter.get('/capsules', isLoggedIn, async (req, res) => {
         const unlockedCapsules = user.capsules.filter(capsule => capsule.unlockDate <= currentDate);
         const lockedCapsules = user.capsules.filter(capsule => capsule.unlockDate > currentDate);
         
+<<<<<<< HEAD
         res.render('myCapsules', { unlockedCapsules, lockedCapsules, user, username: req.user.name });
+=======
+        console.log(unlockedCapsules, lockedCapsules);
+        res.render('myCapsules', { unlockedCapsules, lockedCapsules, user,username: req.user.name });
+>>>>>>> parent of 6488654 (some changes)
     } catch (error) {
         console.error('Error retrieving capsules:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
 
-capsuleRouter.get('/capsules/create', isLoggedIn, (req, res) => {
-    res.render('createCapsule');
-});
-
 capsuleRouter.post('/capsules/create', isLoggedIn, async (req, res) => {
     try {
+<<<<<<< HEAD
         const { capsuleName, capsuleDescription, unlockDate, lockOption, lockDate } = req.body;
         const userId = req.user._id; // Get the authenticated user's ID
 
@@ -63,12 +65,16 @@ capsuleRouter.post('/capsules/create', isLoggedIn, async (req, res) => {
         user.capsules.push(capsule);
         await user.save();
 
+=======
+        await createCapsule(req, res);
+>>>>>>> parent of 6488654 (some changes)
         res.redirect('/dashboard'); // Redirect to dashboard after creation
     } catch (error) {
         console.error("Error creating capsule:", error);
         res.status(500).send("Internal Server Error");
     }
 });
+
 
 capsuleRouter.get('/capsule/:capsuleId', isLoggedIn, async (req, res) => {
     try {
@@ -86,7 +92,7 @@ capsuleRouter.get('/capsule/:capsuleId', isLoggedIn, async (req, res) => {
             return res.status(404).json({ message: 'Capsule not found' });
         }
     
-        res.render('individualCapsule', { capsule: capsule, username: req.user.name });
+        res.render('individualCapsule',{capsule:capsule,username: req.user.name});
     } catch (error) {
         console.error('Error retrieving capsule:', error);
         res.status(500).json({ message: 'Internal server error' });
