@@ -26,7 +26,8 @@ const friendSchema = new mongoose.Schema({
 const sharedCapsuleSchema = new mongoose.Schema({
     capsuleId: { type: mongoose.Schema.Types.ObjectId, ref: 'Capsule', required: true },
     capsuleName: { type: String, required: true },
-    sharedBy: { type: String, required: true }
+    sharedBy: { type: String, required: true },
+    unlockDate: { type: Date, required: true } // Add unlockDate field
 });
 
 const userSchema = new mongoose.Schema({

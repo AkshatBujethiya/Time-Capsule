@@ -70,7 +70,8 @@ UploadRouter.post('/upload', isLoggedIn, upload.array('files', 10), async (req, 
                     friend.sharedCapsules.push({
                         capsuleId: savedCapsule._id,
                         capsuleName: savedCapsule.capsuleName, // Add capsule name
-                        sharedBy: userEmail
+                        sharedBy: userEmail,
+                        unlockDate: savedCapsule.unlockDate // Add unlock date
                     });
                     await friend.save();
                     savedCapsule.sharedWith.push(email); // Add the friend's email to the sharedWith array
