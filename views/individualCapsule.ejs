@@ -5,6 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= capsule.capsuleName %></title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function startCountdown(unlockDate, lockDate, elementId) {
+            const countDownDate = new Date(unlockDate).getTime();
+            const lockDateTime = new Date(lockDate).getTime();
+            const countdownElement = document.getElementById(elementId);
+
+            const updateCountdown = setInterval(function() {
+                const now = new Date().getTime();
+                const distance = countDownDate - now;
+                const lockDistance = lockDateTime - now;
+
+                if (lockDistance > 0) {
+                    countdownElement.innerHTML = "Unlocked until " + new Date(lockDate).toLocaleString();
+                    return;
+                }
+
+                if (distance < 0) {
+                    clearInterval(updateCountdown);
+                    countdownElement.innerHTML = "Unlocked";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            }, 1000);
+        }
+    </script>
 </head>
 <body class="bg-gradient-to-r from-pink-400 to-purple-500 min-h-screen flex justify-center items-center p-6">
 

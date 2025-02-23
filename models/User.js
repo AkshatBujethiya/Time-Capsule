@@ -14,7 +14,7 @@ const capsuleSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
     isCommunal: { type: Boolean, default: false }, // Indicates if the capsule is communal
     visibility: { type: String, enum: ['private', 'shared', 'public'], default: 'private' }, // Visibility of the capsule
-    sharedWith: [{ type: String, required: false }] // Array of email IDs with whom the capsule is shared
+    sharedWith: [{ type: String, required: false }], // Array of email IDs with whom the capsule is shared
 });
 
 const friendSchema = new mongoose.Schema({
@@ -36,7 +36,8 @@ const sharedCapsuleSchema = new mongoose.Schema({
     capsuleId: { type: mongoose.Schema.Types.ObjectId, ref: 'Capsule', required: true },
     capsuleName: { type: String, required: true },
     sharedBy: { type: String, required: true },
-    unlockDate: { type: Date, required: true } // Add unlockDate field
+    unlockDate: { type: Date, required: true }, // Add unlockDate field
+    lockDate: { type: Date, required: false } // Add lockDate field
 });
 
 const userSchema = new mongoose.Schema({
