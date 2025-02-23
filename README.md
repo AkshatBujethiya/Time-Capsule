@@ -62,7 +62,7 @@ The server will start on the specified port. Visit `http://localhost:YOUR_PORT` 
 
 ## For KrackHack 2025 submission
 
-Demo Video: [Youtube link](www.youtube.com)
+Demo Video: [Youtube link](https://www.youtube.com/)
 
 ---
 
