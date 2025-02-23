@@ -52,6 +52,18 @@
                 <span>🏠</span>
                 <span>Home</span>
             </a>
+            <a href="/capsules" id="openCapsule" class="flex items-center space-x-2 text-gray-600 p-3 rounded-lg hover:bg-blue-300 space-x-2 transform transition-all hover:scale-110">
+                <span>💼</span>
+                <span>My Capsule</span>
+            </a>
+            <a href="/sharedcapsule" id="openCapsule" class="flex items-center space-x-2 text-gray-600 p-3 rounded-lg hover:bg-blue-300 space-x-2 transform transition-all hover:scale-110">
+                <span>📤</span>
+                <span>Shared Capsule</span>
+            </a>
+            <a href="/friends" id="openCapsule" class="flex items-center space-x-2 text-gray-600 p-3 rounded-lg hover:bg-blue-300 space-x-2 transform transition-all hover:scale-110">
+                <span>👥</span>
+                <span>Shared Capsule</span>
+            </a>
             <a href="/myaccount" class="flex items-center space-x-2 text-gray-600 p-3 rounded-lg hover:bg-blue-300 space-x-2 transform transition-all hover:scale-110">
                 <span>👤</span>
                 <span>Account</span>
@@ -60,11 +72,12 @@
                 <span>🚪</span>
                 <span>Logout</span>
             </a>
+            
         </nav>
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 flex flex-col items-center justify-center text-center p-8">
+    <main class="flex-1 flex flex-col items-center justify-center text-center p-8">  
         <div class="bg-white shadow-lg p-10 glass flex flex-col items-center">
             <h1 class="text-3xl font-bold text-blue-800">Welcome!</h1>
             <h1 class="text-3xl font-bold text-blue-800"><%= username %> </h1>
@@ -130,13 +143,6 @@
                 <button type="submit" id="submitCapsule" class="bg-blue-600 text-white px-6 py-3 rounded-lg mt-6 hover:bg-blue-700 transition w-full">Save Capsule</button>
             </form>
         </div>
-    </div>
-
-    <!-- Bottom Navbar -->
-    <div class="fixed bottom-0 w-full bg-white shadow-md flex justify-around p-4">
-        <a href="/capsules" id="openCapsule" class="text-gray-600 hover:text-blue-600 text-4xl space-x-2 transform transition-all hover:scale-110">💼</a>
-        <a href="/sharedcapsule" class="text-gray-600 hover:text-blue-600 text-4xl space-x-2 transform transition-all hover:scale-110">📤</a>
-        <a href="/friends" class="text-gray-600 hover:text-blue-600 text-4xl space-x-2 transform transition-all hover:scale-110">👥</a>
     </div>
 
     <!-- JavaScript for Capsule Popup -->
