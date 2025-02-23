@@ -8,12 +8,19 @@ HomeRouter.get("/",(req,res)=>{
 });
 
 HomeRouter.get("/dashboard", isLoggedIn, (req,res)=>{
-    res.render(`dashboard`);
+    res.render(`dashboard`,{
+        username: req.user.name,
+    });
 });
 
 HomeRouter.get("/contact", (req,res)=>{
     res.render(`contact`);
 });
+
+HomeRouter.get("/story", (req,res)=>{
+    res.render(`story`);
+});
+
 
 HomeRouter.get("/myaccount", isLoggedIn, (req, res) => {
     res.render('myaccount', { 

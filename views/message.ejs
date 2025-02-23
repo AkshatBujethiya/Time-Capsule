@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with <%= friend.name %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class=" bg-gray-300 text-white min-h-screen flex items-center justify-center">
+
+    <!-- Chat Container -->
+    <div class=" bg-gradient-to-br from-pink-400 to-purple-600 w-[100%] max-w-7xl h-[90vh] flex shadow-2xl rounded-xl overflow-hidden">
+
+        <!-- Friends List (Left Sidebar) -->
+        <div class="w-1/3 bg-white bg-opacity-20 p-5 flex flex-col rounded-l-xl backdrop-blur-lg">
+            
+            <!-- Header -->
+        <div class="flex flex-col items-center mb-4">
+            <h3 class="text-lg font-semibold text-black">Your Friends</h3>
+            <a href="/dashboard">
+                <img src="/images/background1.png" alt="Logo" class="w-8 h-8 transition-transform hover:scale-110 mt-2">
+            </a>
+        </div>
+
+
+            <!-- Friends List -->
+            <ul class="flex-1 overflow-y-auto space-y-3">
+                <% if (friends.length > 0) { %>
+                    <% friends.forEach(function(friend) { %>
+                        <li class="flex items-center justify-between p-3 bg-white bg-opacity-30 hover:bg-opacity-50 rounded-lg transition space-x-2 transform transition-all hover:scale-105">
+                            <a href="/message/<%= friend.googleId %>" class="flex items-center space-x-3 text-black hover:text-blue-400 transition">
+                                <div class="w-10 h-10 bg-white bg-opacity-50 rounded-full">
+                                    <img src="/images/background10.png" alt="Graduation" class="w-9 h-9  rounded-lg shadow-md ">
+                                </div>
+                                <span class="text-sm font-medium"><%= friend.name %></span>
+                            </a>
+                        </li>
+                    <% }); %>
+                <% } else { %>
+                    <li class="text-center text-white p-4">No friends added yet.</li>
+                <% } %>
+            </ul>
+        </div>
+
+        <!-- Chat Section (Right Side) -->
+        <div class="w-2/3 flex flex-col bg-white bg-opacity-20 backdrop-blur-lg rounded-r-xl">
+
+            <!-- Chat Header -->
+            <div class="p-4 flex items-center justify-between bg-white bg-opacity-30 ">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white bg-opacity-50 rounded-full">
+                        <img src="/images/background10.png" alt="Graduation" class="w-9 h-9  rounded-lg shadow-md ">
+                </div>
+                    <h1 class="text-lg font-semibold text-black"><%= friend.name %></h1>
+                </div>
+                <button class="text-white hover:text-gray-200 transition">⋮</button>
+            </div>
+
+            <!-- Chat Messages -->
+            <div id="chat-box" class="flex-1 overflow-y-auto p-4 space-y-3">
+                <% messages.forEach(function(msg) { %>
+                    <div class="<%= msg.sender.toString() === user._id.toString() ? 'text-right' : 'text-left' %> animate-fadeIn">
+                        <p class="inline-block p-3 rounded-xl  text-black 
+                            <%= msg.sender.toString() === user._id.toString() ? 'bg-gray-300' : 'bg-white bg-opacity-40 text-black' %>">
+                            <%= msg.text %> 
+                            
+                        </p>
+                        <span class="block text-xs text-black mt-1"><%= new Date(msg.timestamp).toLocaleTimeString() %></span>
+                    </div>
+                <% }); %>
+            </div>
+
+            <!-- Message Input -->
+            <form action="/message/<%= friend.googleId %>" method="post" class="flex items-center p-3 bg-white bg-opacity-30 rounded-b-xl">
+                <input type="text" name="text" class="flex-1 p-2 bg-white text-black rounded-md focus:outline-none placeholder-gray-500" placeholder="Type a message..." required>
+                <button type="submit" class="ml-3 bg-blue-500 px-4 py-2 text-white rounded-md hover:bg-blue-600 transition">Send</button>
+            </form>
+        </div>
+
+    </div>
+
+    <style>
+        /* Fade-in animation for messages */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out;
+        }
+    </style>
+
+</body>
+</html>
