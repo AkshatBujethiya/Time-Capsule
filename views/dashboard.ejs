@@ -25,6 +25,18 @@
             transform: scale(1);
             pointer-events: auto;
         }
+        .tag {
+            display: inline-block;
+            background-color: #e2e8f0;
+            color: #2d3748;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            margin: 0.25rem;
+        }
+        .tag .remove-tag {
+            margin-left: 0.5rem;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-r from-pink-500 to-purple-700 h-screen flex">
@@ -76,7 +88,7 @@
         <div class="bg-white rounded-lg p-6 w-96 shadow-lg relative">
             <button id="closeCapsule" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-lg">❌</button>
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Create New Capsule</h2>
-            <form action="/upload" method="post" enctype="multipart/form-data">
+            <form id="capsuleForm" action="/upload" method="post" enctype="multipart/form-data">
                 <input name="capsuleName" type="text" placeholder="Capsule Name" class="mt-4 p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600" required>
                 <textarea name="capsuleDescription" placeholder="Capsule Description (Optional)" class="mt-4 p-3 border rounded w-full h-24 focus:outline-none focus:ring-2 focus:ring-blue-600"></textarea>
                 <div class="mt-4">
@@ -91,7 +103,31 @@
                     <label for="unlockDate" class="block text-gray-700">Unlock Date & Time</label>
                     <input name="unlockDate" type="datetime-local" class="mt-2 p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600" required>
                 </div>
-                <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg mt-6 hover:bg-blue-700 transition w-full">Save Capsule</button>
+                <div class="mt-4">
+                    <label for="lockOption" class="block text-gray-700">Lock Option</label>
+                    <select name="lockOption" id="lockOption" class="mt-2 p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+                        <option value="immediate">Lock Immediately</option>
+                        <option value="specified">Lock at Specified Date</option>
+                    </select>
+                </div>
+                <div class="mt-4" id="lockDateContainer" style="display: none;">
+                    <label for="lockDate" class="block text-gray-700">Lock Date & Time</label>
+                    <input name="lockDate" type="datetime-local" class="mt-2 p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600">
+                </div>
+                <div class="mt-4">
+                    <label for="visibility" class="block text-gray-700">Visibility</label>
+                    <select name="visibility" id="visibility" class="mt-2 p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+                        <option value="private">Private</option>
+                        <option value="shared">Shared with Specific Users</option>
+                        <option value="public">Public</option>
+                    </select>
+                </div>
+                <div class="mt-4" id="friendEmailsContainer" style="display: none;">
+                    <label for="friendEmails" class="block text-gray-700">Share with (Friend's Emails)</label>
+                    <input id="friendEmailsInput" type="text" placeholder="Enter friends' emails" class="mt-2 p-3 border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    <div id="emailTags" class="mt-2"></div>
+                </div>
+                <button type="submit" id="submitCapsule" class="bg-blue-600 text-white px-6 py-3 rounded-lg mt-6 hover:bg-blue-700 transition w-full">Save Capsule</button>
             </form>
         </div>
     </div>
@@ -108,7 +144,13 @@
         const openModal = document.getElementById("openCapsule");
         const closeModal = document.getElementById("closeCapsule");
         const modal = document.getElementById("capsuleModal");
-        
+        const visibilitySelect = document.getElementById("visibility");
+        const friendEmailsContainer = document.getElementById("friendEmailsContainer");
+        const friendEmailsInput = document.getElementById("friendEmailsInput");
+        const emailTags = document.getElementById("emailTags");
+        const lockOption = document.getElementById('lockOption');
+        const lockDateContainer = document.getElementById('lockDateContainer');
+
         openModal.addEventListener("click", function() {
             modal.classList.remove("hidden");
             modal.classList.add("visible");
@@ -131,6 +173,65 @@
         document.getElementById("fileInput").addEventListener("change", function() {
             const fileName = this.files[0] ? this.files[0].name : "No file chosen";
             document.getElementById("fileName").textContent = fileName;
+        });
+
+        // Show/hide friend emails input based on visibility selection
+        visibilitySelect.addEventListener("change", function() {
+            if (this.value === "shared") {
+                friendEmailsContainer.style.display = "block";
+            } else {
+                friendEmailsContainer.style.display = "none";
+            }
+        });
+
+        // Show/hide lock date input based on lock option selection
+        lockOption.addEventListener("change", function() {
+            if (this.value === "specified") {
+                lockDateContainer.style.display = "block";
+            } else {
+                lockDateContainer.style.display = "none";
+            }
+        });
+
+        // Add email tag
+        friendEmailsInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                const email = friendEmailsInput.value.trim();
+                if (email) {
+                    addEmailTag(email);
+                    friendEmailsInput.value = "";
+                }
+            }
+        });
+
+        function addEmailTag(email) {
+            const tag = document.createElement("span");
+            tag.className = "tag";
+            tag.textContent = email;
+
+            const removeTag = document.createElement("span");
+            removeTag.className = "remove-tag";
+            removeTag.textContent = "✖";
+            removeTag.addEventListener("click", function() {
+                emailTags.removeChild(tag);
+            });
+
+            tag.appendChild(removeTag);
+            emailTags.appendChild(tag);
+        }
+
+        // Add email tags to form before submission
+        document.getElementById("capsuleForm").addEventListener("submit", function(event) {
+            const emails = [];
+            emailTags.querySelectorAll(".tag").forEach(tag => {
+                emails.push(tag.textContent.replace("✖", "").trim());
+            });
+            const emailInput = document.createElement("input");
+            emailInput.type = "hidden";
+            emailInput.name = "sharedEmails";
+            emailInput.value = JSON.stringify(emails);
+            this.appendChild(emailInput);
         });
     </script>
 

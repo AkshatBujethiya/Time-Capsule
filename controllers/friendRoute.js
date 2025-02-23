@@ -1,10 +1,10 @@
 const { Router } = require("express");
 const FriendRouter = Router();
-const {User} = require("../models/User");
-const { isLoggedIn } = require("../configs/auth");
+const {User} = require('../models/User');
+const { isLoggedIn } = require('../configs/auth');
+const { addFriend, removeFriend } = require('../configs/friendController');
 
-// ✅ Get Friends & Pending Requests
-FriendRouter.get("/friends", isLoggedIn, async (req, res) => {
+FriendRouter.get('/friends', isLoggedIn, async (req, res) => {
     try {
         const userId = req.user._id;
 

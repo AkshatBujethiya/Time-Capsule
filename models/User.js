@@ -10,7 +10,11 @@ const capsuleSchema = new mongoose.Schema({
     capsuleDescription: { type: String, required: false },
     files: [fileSchema], // Array of files
     unlockDate: { type: Date, required: true }, // Date when the capsule should be unlocked
+    lockDate: { type: Date, required: false }, // Optional lock date
     createdAt: { type: Date, default: Date.now },
+    isCommunal: { type: Boolean, default: false }, // Indicates if the capsule is communal
+    visibility: { type: String, enum: ['private', 'shared', 'public'], default: 'private' }, // Visibility of the capsule
+    sharedWith: [{ type: String, required: false }] // Array of email IDs with whom the capsule is shared
 });
 
 const friendSchema = new mongoose.Schema({
@@ -28,6 +32,13 @@ const messageSchema = new mongoose.Schema({
 
 
 
+const sharedCapsuleSchema = new mongoose.Schema({
+    capsuleId: { type: mongoose.Schema.Types.ObjectId, ref: 'Capsule', required: true },
+    capsuleName: { type: String, required: true },
+    sharedBy: { type: String, required: true },
+    unlockDate: { type: Date, required: true } // Add unlockDate field
+});
+
 const userSchema = new mongoose.Schema({
     googleId: { type: String, required: true, unique: true , index: true  },
     name: { type: String, required: true },
@@ -36,6 +47,7 @@ const userSchema = new mongoose.Schema({
     capsules: [capsuleSchema], // Array of capsules
     friends: [friendSchema], // Array of friends
     createdAt: { type: Date, default: Date.now },
+    sharedCapsules: [sharedCapsuleSchema], // Array of shared capsule objects
     friendRequestsSent: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     friendRequestsReceived: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }]
 });

@@ -2,11 +2,11 @@ const { Router } = require('express');
 const UploadRouter = Router();
 const { cloudinary } = require('../configs/cloudinaryConfig');
 const upload = require('../configs/multer');
-const {User} = require('../models/User'); // Import the User model
-const {isLoggedIn} = require('../configs/auth');
+const { User } = require('../models/User'); // Import the User model
+const { isLoggedIn } = require('../configs/auth');
 
 // Render the upload page
-UploadRouter.get('/upload', isLoggedIn, (req, res) => {
+UploadRouter.get('/upload', isLoggedIn, (_, res) => {
     res.render('upload');
 });
 
@@ -30,9 +30,10 @@ UploadRouter.post('/upload', isLoggedIn, upload.array('files', 10), async (req, 
 
         const uploadedFiles = await Promise.all(uploadPromises);
 
-        // Get the authenticated user's ID
+        // Get the authenticated user's ID and email
         const userId = req.user._id;
-        console.log(userId);
+        const userEmail = req.user.email;
+
         // Find the user and add the file URLs to their profile
         const user = await User.findById(userId);
         if (!user) {
@@ -45,12 +46,44 @@ UploadRouter.post('/upload', isLoggedIn, upload.array('files', 10), async (req, 
             capsuleDescription: req.body.capsuleDescription,
             files: uploadedFiles,
             unlockDate: new Date(req.body.unlockDate),
-            createdAt: new Date()
+            lockDate: req.body.lockDate ? new Date(req.body.lockDate) : null, // Add lock date
+            visibility: req.body.visibility, // Store visibility attribute
+            isCommunal: req.body.visibility === 'public', // Set isCommunal based on visibility
+            createdAt: new Date(),
+            sharedWith: [] // Initialize sharedWith as an empty array
         };
-
+        console.log(req.body);
         // Add the capsule to the user's capsules array
         user.capsules.push(capsule);
         await user.save();
+
+        // Get the capsule ID after saving
+        const savedCapsule = user.capsules[user.capsules.length - 1];
+
+        // Share the capsule with friends if emails are provided
+        if (req.body.visibility === 'shared' && req.body.sharedEmails) {
+            console.log('Shared with friends');
+            const friendEmails = JSON.parse(req.body.sharedEmails).map(email => email.trim());
+            for (const email of friendEmails) {
+                const friend = await User.findOne({ email });
+                console.log(savedCapsule._id);
+                if (friend) {
+                    friend.sharedCapsules.push({
+                        capsuleId: savedCapsule._id,
+                        capsuleName: savedCapsule.capsuleName, // Add capsule name
+                        sharedBy: userEmail,
+                        unlockDate: savedCapsule.unlockDate, // Add unlock date
+                        lockDate: savedCapsule.lockDate // Add lock date
+                    });
+                    await friend.save();
+                    savedCapsule.sharedWith.push(email); // Add the friend's email to the sharedWith array
+                }
+            }
+        }
+
+        // Update the capsule with sharedWith information
+        await user.save();
+
         res.redirect('/dashboard');
     } catch (error) {
         console.error('Error handling file upload:', error);
