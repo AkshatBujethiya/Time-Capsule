@@ -58,7 +58,7 @@
         <h2 class="text-3xl font-semibold mb-4">Communal Capsules</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <% communalCapsules.forEach(function(capsule, index) { %>
-                <div class="bg-white rounded-lg shadow-md p-6 cursor-pointer transform transition duration-300 hover:scale-105" onclick="location.href='/capsule/<%= capsule.id %>'">
+                <div class="bg-white rounded-lg shadow-md p-6 cursor-pointer transform transition duration-300 hover:scale-105" onclick="location.href='/capsule/<%= capsule._id %>'">
                     <h2 class="text-2xl font-semibold mb-2"><%= capsule.capsuleName %></h2>
                     <p class="text-gray-600" id="countdown-communal-<%= index %>">Loading...</p>
                     <script>
