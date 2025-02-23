@@ -4,67 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Friends Page</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <header class="bg-primary text-white text-center py-3">
-        <h1>Your Friends</h1>
-    </header>
-    <main class="container mt-4">
-        <!-- Send Friend Request -->
-        <form action="/friends/request" method="POST" class="form-inline mb-4">
-            <div class="form-group mr-2">
-                <input type="email" name="friendEmail" class="form-control" placeholder="Enter friend's email" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Send Request</button>
+<body class="bg-gradient-to-br from-pink-500 to-purple-700 text-white min-h-screen flex flex-col items-center justify-center px-2">
+
+    <!-- Logo -->
+    <a href="/dashboard" class="mb-4">
+        <img src="/images/background1.png" alt="Virtual Time Capsule" class="w-10 h-10 transition-transform duration-300 hover:scale-110 hover:rotate-6">
+    </a>
+
+    <!-- Heading -->
+    <h1 class="text-3xl font-bold text-center mb-4">Your Friends(<%= username %>)</h1>
+
+    <!-- Send Friend Request -->
+    <div class="bg-white bg-opacity-20 p-6 rounded-xl shadow-lg w-full max-w-md mb-6 hover:shadow-xl transition">
+        <h3 class="text-lg font-semibold text-center mb-4">Send Friend Request</h3>
+        <form action="/friends/request" method="POST" class="flex space-x-2">
+            <input type="email" name="friendEmail" class="flex-1 p-2 rounded-lg text-black outline-none border border-white bg-white" placeholder="Enter friend's email" required>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition space-x-2 transform transition-all hover:scale-105">Send</button>
         </form>
+    </div>
 
-        <!-- Pending Friend Requests -->
-        <h3>Pending Requests</h3>
-        <ul class="list-group">
-            <% if (pendingRequests.length > 0) { %>
-                <% pendingRequests.forEach(function(request) { %>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <%= request.email %>
-                        <div>
-                            <form action="/friends/accept" method="POST" class="d-inline">
-                                <input type="hidden" name="friendId" value="<%= request._id %>">
-                                <button type="submit" class="btn btn-success btn-sm">Accept</button>
-                            </form>
-                            <form action="/friends/reject" method="POST" class="d-inline">
-                                <input type="hidden" name="friendId" value="<%= request._id %>">
-                                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
-                            </form>
-                        </div>
-                    </li>
-                <% }); %>
-            <% } else { %>
-                <li class="list-group-item">No pending requests.</li>
-            <% } %>
-        </ul>
+<!-- Friends List -->
+<div class="bg-white bg-opacity-20 p-6 rounded-xl shadow-lg w-full max-w-md hover:shadow-xl transition">
+    <h3 class="text-lg font-semibold text-center mb-4">Your Friends</h3>
+    <ul>
+        <% if (friends.length > 0) { %>
+            <% friends.forEach(function(friend) { %>
+                <li class="bg-transparent bg-white border border-white text-black p-2 rounded-lg flex justify-between items-center mb-2 space-x-2 transform transition-all hover:scale-105">
+                    <a href="/message/<%= friend.googleId %>" class="flex-1 text-black hover:text-blue-400 transition ">
+                        <%= friend.name %> 
+                    </a>
+                    <form action="/friends/remove" method="POST">
+                        <input type="hidden" name="friendId" value="<%= friend._id %>">
+                        <button type="submit" class="bg-red-400 hover:bg-red-600 text-white px-3 py-1 rounded-md transition">Remove</button>
+                    </form>
+                </li>
+            <% }); %>
+        <% } else { %>
+            <li class="text-center text-white p-2">You have no friends added yet.</li>
+        <% } %>
+    </ul>
+</div>
 
-        <!-- Friends List -->
-        <h3 class="mt-4">Your Friends</h3>
-        <ul class="list-group">
-            <% if (friends.length > 0) { %>
-                <% friends.forEach(function(friend) { %>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <%= friend.email %>
-                        <form action="/friends/remove" method="POST">
-                            <input type="hidden" name="friendEmail" value="<%= friend.email %>">
-                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                        </form>
-                    </li>
-                <% }); %>
-            <% } else { %>
-                <li class="list-group-item">You have no friends added yet.</li>
-            <% } %>
-        </ul>
-    </main>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <!-- Pending Requests -->
+        <div class="bg-white bg-opacity-20 p-6 rounded-xl shadow-lg w-full max-w-md mt-6 mb-6 hover:shadow-xl transition">
+            <h3 class="text-lg font-semibold text-center mb-4">Pending Requests</h3>
+            <ul>
+                <% if (pendingRequests.length > 0) { %>
+                    <% pendingRequests.forEach(function(request) { %>
+                        <li class="bg-transparent border border-white text-white p-2 rounded-lg flex justify-between items-center mb-2">
+                            <%= request.email %>
+                            <div>
+                                <form action="/friends/accept" method="POST" class="inline">
+                                    <input type="hidden" name="friendId" value="<%= request._id %>">
+                                    <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md transition">Accept</button>
+                                </form>
+                                <form action="/friends/reject" method="POST" class="inline">
+                                    <input type="hidden" name="friendId" value="<%= request._id %>">
+                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition">Reject</button>
+                                </form>
+                            </div>
+                        </li>
+                    <% }); %>
+                <% } else { %>
+                    <li class="text-center text-white p-2">No pending requests.</li>
+                <% } %>
+            </ul>
+        </div>
+    
+
 </body>
 </html>

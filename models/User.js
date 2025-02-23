@@ -19,8 +19,17 @@ const friendSchema = new mongoose.Schema({
     email: { type: String, required: true }
 });
 
+const messageSchema = new mongoose.Schema({
+    sender: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Sender User
+    receiver: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Receiver User
+    text: { type: String, required: true }, // Message Content
+    timestamp: { type: Date, default: Date.now } // Message Timestamp
+});
+
+
+
 const userSchema = new mongoose.Schema({
-    googleId: { type: String, required: true, unique: true },
+    googleId: { type: String, required: true, unique: true , index: true  },
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     avatar: { type: String }, // URL to the user's profile picture
@@ -33,5 +42,6 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 const Capsule = mongoose.model("Capsule", capsuleSchema);
+const Message = mongoose.model("Message", messageSchema);
 
-module.exports = User;
+module.exports ={ User,Message };

@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { createCapsule } = require('../configs/capsuleController');
 const { isLoggedIn } = require('../configs/auth');
-const User = require('../models/User');
+const {User} = require('../models/User');
 
 const capsuleRouter = Router();
 

@@ -2,7 +2,7 @@ const { Router } = require('express');
 const UploadRouter = Router();
 const { cloudinary } = require('../configs/cloudinaryConfig');
 const upload = require('../configs/multer');
-const User = require('../models/User'); // Import the User model
+const {User} = require('../models/User'); // Import the User model
 const {isLoggedIn} = require('../configs/auth');
 
 // Render the upload page
