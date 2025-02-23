@@ -45,10 +45,9 @@
         }
     </script>
 </head>
-<body class="bg-gray-100 h-screen flex">
-
+<body class="bg-gradient-to-r from-pink-500 to-purple-700 h-screen flex">
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-lg h-full p-6 glass">
+    <aside class="w-64 bg-white shadow-lg h-full p-6">
         <div class="text-xl font-bold text-blue-900 flex items-center space-x-2">
             <img src="/images/background1.png" alt="Virtual Time Capsule" class="w-6 h-6 object-contain">
             <span>Time Capsule</span>
@@ -82,35 +81,40 @@
     </aside>
 
     <!-- Main Content -->
-    <div class="flex-1 p-4">
-        <div class="container mx-auto">
-            <h1 class="text-4xl font-bold text-center mb-8">Shared Capsules</h1>
-            
-            <h2 class="text-3xl font-semibold mb-4">Shared Capsules</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
-                <% sharedCapsules.forEach(function(capsule, index) { %>
-                    <div class="bg-white rounded-lg shadow-md p-6 cursor-pointer transform transition duration-300 hover:scale-105" onclick="location.href='/capsule/<%= capsule.sharedBy %>/<%= capsule.capsuleId %>'">
-                        <h2 class="text-2xl font-semibold mb-2"><%= capsule.capsuleName %></h2>
-                        <p class="text-gray-600 mb-2">Shared by: <%= capsule.sharedBy %></p>
-                        <p class="text-gray-600" id="countdown-shared-<%= index %>">Loading...</p>
-                        <script>
-                            startCountdown('<%= capsule.unlockDate %>', '<%= capsule.lockDate %>', 'countdown-shared-<%= index %>');
-                        </script>
-                    </div>
-                <% }); %>
+    <div class="flex-1 p-4 flex flex-col items-center mt-8">
+        <h1 class="text-4xl font-bold text-blue-800 mb-8">Shared Capsules</h1>
+        
+        <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <h2 class="text-3xl font-semibold mb-4">Shared Capsules</h2>
+                <div class="grid grid-cols-1 gap-6 mb-8">
+                    <% sharedCapsules.forEach(function(capsule, index) { %>
+                        <div class="bg-white rounded-lg shadow-md p-6 cursor-pointer transform transition duration-300 hover:scale-105" onclick="location.href='/capsule/<%= capsule.sharedBy %>/<%= capsule.capsuleId %>'">
+                            <h2 class="text-2xl font-semibold mb-2"><%= capsule.capsuleName %></h2>
+                            <p class="text-gray-600 mb-2">Shared by: <%= capsule.sharedBy %></p>
+                            <p class="text-gray-600" id="countdown-
+                            <p class="text-gray-600" id="countdown-shared-<%= index %>">Loading...</p>
+                            <script>
+                                startCountdown('<%= capsule.unlockDate %>', '<%= capsule.lockDate %>', 'countdown-shared-<%= index %>');
+                            </script>
+                        </div>
+                    <% }); %>
+                </div>
             </div>
 
-            <h2 class="text-3xl font-semibold mb-4">Community Capsules</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                <% communalCapsules.forEach(function(capsule, index) { %>
-                    <div class="bg-white rounded-lg shadow-md p-6 cursor-pointer transform transition duration-300 hover:scale-105" onclick="location.href='/capsule/<%= capsule._id %>'">
-                        <h2 class="text-2xl font-semibold mb-2"><%= capsule.capsuleName %></h2>
-                        <p class="text-gray-600" id="countdown-communal-<%= index %>">Loading...</p>
-                        <script>
-                            startCountdown('<%= capsule.unlockDate %>', '<%= capsule.lockDate %>', 'countdown-communal-<%= index %>');
-                        </script>
-                    </div>
-                <% }); %>
+            <div>
+                <h2 class="text-3xl font-semibold mb-4">Community Capsules</h2>
+                <div class="grid grid-cols-1 gap-6">
+                    <% communalCapsules.forEach(function(capsule, index) { %>
+                        <div class="bg-white rounded-lg shadow-md p-6 cursor-pointer transform transition duration-300 hover:scale-105" onclick="location.href='/capsule/<%= capsule._id %>'">
+                            <h2 class="text-2xl font-semibold mb-2"><%= capsule.capsuleName %></h2>
+                            <p class="text-gray-600" id="countdown-communal-<%= index %>">Loading...</p>
+                            <script>
+                                startCountdown('<%= capsule.unlockDate %>', '<%= capsule.lockDate %>', 'countdown-communal-<%= index %>');
+                            </script>
+                        </div>
+                    <% }); %>
+                </div>
             </div>
         </div>
     </div>
